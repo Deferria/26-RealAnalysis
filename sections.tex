@@ -1,0 +1,1355 @@
+\def\presectionname{0\quad 相聚在东海之滨}
+\section*{\presectionname}
+\addcontentsline{toc}{section}{\presectionname}
+这是笔者 \Dedicatia{} 在上海交通大学数学科学学院的本科期间的【实变函数】的课程笔记. 
+【实变函数】又名【实分析】, 是标准分析学中的基础课程. 课程内容主要包含 Lebesgue 测度论和 Lebesgue 积分理论, 然后自然地扩展到一般的测度上, 作为应用, 还将研究可积函数空间的种种性质, 作为泛函分析等更高级的课程的切入点. \\
+在撰写过程中主要参考了以下教材:
+\begin{itemize}
+    \item \textit{Real Analysis}, H. L. Royden
+    \item 华章译丛对上书的中译本, 机械工业出版社
+    \item \textit{Real Analysis and Complex Analysis}, Walter Rudin
+    \item 华章译丛对上书的中译本, 机械工业出版社
+    \item 实变函数论与泛函分析（上册）, 夏道行 等, 高等教育出版社
+    \item 实变函数解题指南, 周民强, 北京大学出版社
+\end{itemize}
+我们将从介绍前置知识开始.
+\begin{thm}
+    [AC]
+    {选择公理}
+    [Axiom of Choice]
+    设 \(\{A_i\}_{i\in I}\) 是一个非空集合族, 即对于每个 \(i\in I\), \(A_i\) 都是一个非空集合. 存在一个选择函数 \(f: I \to \bigcup_{i\in I} A_i\), 满足对于每个 \(i\in I\), \(f(i) \in A_i\).
+\end{thm}
+\begin{rmk}
+    这个公理直观上理解, 就是选择公理允许我们从一族集合中的每一个集合中选择一个元素, 即使这个集合族是无限的. \\
+    这好像是一句废话. 但是很多时候这个情形是不平凡的. 假如集合有无限多个, 那么我们不可能在使用一个明确的规则完成这个选择, 对于后续的证明也都无法进行下去. 这在严格的构造主义者的世界中是不可接受的, 但是选择公理认为这样是可行的.
+\end{rmk}
+\begin{crl}
+    [Zorn]
+    {Zorn 引理}
+    [Zorn's Lemma]
+    设 \(P\) 是一个偏序集, 如果 \(P\) 中的每个全序子集都有上界, 则 \(P\) 中至少存在一个极大元.
+\end{crl}
+\begin{rmk}
+    这是选择公理的等价描述. 具体而言, 如果不存在这个极大元, 那么这个全序子集可以一直往上延伸, 直到达到一个矛盾. 这就是 Zorn 引理的核心思想.
+\end{rmk}
+\section{Lebesgue 测度论}
+\subsection{基本概念}
+\begin{dfn}
+    [limsup-liminf]
+    {极限集}
+    [limsup / liminf]
+    对于可数集族 \(\{A_n\}_{n=1}^\infty\), 定义
+    上极限集为 
+    \[\limsup_{n\to\infty} A_n := \bigcap_{n=1}^\infty \bigcup_{k=n}^\infty A_k\]
+    下极限集为 
+    \[\liminf_{n\to\infty} A_n := \bigcup_{n=1}^\infty \bigcap_{k=n}^\infty A_k\]
+    用语言描述为: 上极限集包含了所有在无穷多个 \(A_n\) 中出现的元素, 下极限集包含了所有在除了有限多个 \(A_n\) 以外的所有 \(A_n\) 中出现的元素.
+\end{dfn}
+\begin{dfn}
+    [sigma-algebra]
+    {\(\sigma\)-代数}
+    [\(\sigma\)-algebra]
+    设 \(\mathcal{A}\) 是集合 \(X\) 的子集族 (\(\mathcal{A}\subseteq\mathcal{P}(X)\)), 如果满足以下条件:
+    \begin{itemize}
+        \item \(X\in\mathcal{A}\), \(\varnothing\in\mathcal{A}\);
+        \item 如果 \(A\in\mathcal{A}\), 则 \(X\setminus A\in\mathcal{A}\)
+        \item 如果 \(\{A_n\}_{n=1}^\infty \subseteq \mathcal{A}\), 则 \(\bigcup_{n=1}^\infty A_n \in \mathcal{A}\)
+    \end{itemize}
+    则称 \(\mathcal{A}\) 是集合 \(X\) 的一个 \(\sigma\)-代数.
+\end{dfn}
+\begin{rmk}
+    [AI]
+    直观地理解, \(\sigma\)-代数包含了全集和空集, 并且允许补运算、可数并运算和可数交运算. 这使得 \(\sigma\)-代数成为定义测度和概率的基础, 因为我们需要在集合上进行各种运算来定义事件的概率和集合的测度.
+\end{rmk}
+\begin{rmk}
+    [Dedicatia]
+    \(\sigma\)-代数不同于我们在抽象代数中定义的代数. 具体来讲, \(\sigma\)-代数是集合族上的结构, 对于集合族 \(\mathcal{F}\), 我们可以在其上定义二元运算:
+    \begin{itemize}
+        \item 加法运算为对称差运算: \(A + B := (A\setminus B) \cup (B\setminus A)\)
+        \item 乘法运算为交集运算: \(A \cdot B := A \cap B\)
+    \end{itemize}
+    这两种运算满足环公理, 使得其是 Boolean 环.\\
+    如果取域 \(K:\{0,1\}\) 并规定数乘 
+    \begin{itemize}
+        \item \(0 \cdot A := \varnothing\)
+        \item \(1 \cdot A := A\)
+    \end{itemize}
+    则 \(\sigma\)-代数 \(\mathcal{F}\) 还满足线性空间的公理, 使得其是 Boolean 代数.\\
+    普通的代数仅要求满足有限次的并运算和交运算, 而 \(\sigma\)-代数要求满足可数次的并运算和交运算. 这使得 \(\sigma\)-代数在处理无限集合时更为强大, 但也更为复杂. 这就是 \(\sigma\)-代数与普通代数的区别.
+\end{rmk}
+\begin{xmp}
+    [f-sigma-g-delta]
+    {F-sigma 集族与 G-delta 集族}
+    [F-sigma Set and G-delta Set]
+    F-sigma 集族是所有可数闭集的并集的集合, G-delta 集族是所有可数开集的交集的集合.\\
+    定义一个集合 \(A\) 是一个 F-sigma 集当且仅当 \(A\) 可以表示为可数个闭集的并集. 定义一个集合 \(B\) 是一个 G-delta 集当且仅当 \(B\) 可以表示为可数个开集的交集.
+\end{xmp}
+\begin{ppt}
+    {F-sigma 集与 G-delta 集互为补集}
+    \(X\) 是\Fsigma{}当且仅当 \(X^c\) 是 \Gdelta{}集.
+\end{ppt}
+\begin{rmk}
+    理解符号的含义有助于记忆:
+    \begin{itemize}
+        \item F-sigma 集中的 F 代表法语单词 ``Fermé'', 意为 ``闭集'', sigma 代表法语单词 ``Somme'', 意为``并'', 因此 F-sigma 集是可数闭集的并集.
+        \item G-delta 集中的 G 代表德语单词 ``Gebiet'', 意为 ``区域(开集)'', delta 代表德语单词 ``Durchschnitt'', 意为``交'', 因此 G-delta 集是可数开集的交集.
+    \end{itemize}
+\end{rmk}
+\begin{ppt}
+    {开集可表示为可数区间的并}
+    设 \(U\) 是 \(\R\) 中的一个开集, 则 \(U\) 可以表示为至多可数个两两不交的开区间的并集.
+    \[\forall U\subseteq\R, \exists\{I_k\}\subseteq\tau_{\R}, U=\bigsqcup_{k=1}^\infty I_k\]
+\end{ppt}
+\begin{ppt}
+    {实数区间具有不可数基数}
+    \([0,1]\subseteq\R\) 不可数.
+\end{ppt}
+\begin{prf}
+    采用 Cantor 的反证法. 假设 \([0,1]\) 可数, 则可以将 \([0,1]\) 中的元素列成一个序列 \(x_1, x_2, x_3, \ldots\). 每个 \(x_n\) 都可以表示为一个无限小数 \(0.a_{n1}a_{n2}a_{n3}\ldots\), 其中 \(a_{nk}\) 是 \(x_n\) 的第 \(k\) 位小数.\\
+    现在我们构造一个新的数 \(y\), 其小数部分的第 \(k\) 位 \(b_k\) 定义如下:
+    \[b_k = \begin{cases}
+        1, & \text{如果 } a_{kk} \neq 1 \\
+        2, & \text{如果 } a_{kk} = 1
+    \end{cases}\]
+    这样构造的数 \(y = 0.b_1b_2b_3\ldots\) 与序列中的每个数 \(x_n\) 都不同, 因为 \(y\) 的第 \(n\) 位小数 \(b_n\) 与 \(x_n\) 的第 \(n\) 位小数 \(a_{nn}\) 不同.\\
+    因此, \(y\) 不在序列 \(x_1, x_2, x_3, \ldots\) 中, 这与假设 \([0,1]\) 可数矛盾.\\
+    综上所述, \([0,1]\) 不可数.
+\end{prf}
+\subsection{Lebesgue 测度}
+\begin{dfn}
+    [lebesgue-outer-measure]
+    {外测度}
+    [Outer Measure]
+    设 \(X\subseteq\R\), 则 \(X\) 的一个外测度是一个函数 \(\Lebout: \mathcal{P}(X) \to [0, +\infty]\), 满足以下条件:
+    \[\Lebout(X):= \inf\left\{\sum_{i=1}^\infty \ell(I_i) : A\subseteq\{I_i\}_{i=1}^\infty \text{ 是 } X \text{ 的一个开区间覆盖}\right\}\]
+    其中 \(\ell(I_i)\) 是开区间 \(I_i:(a,b)\) 的长度 \(|b-a|\).
+\end{dfn}
+我们约定, 这里所提的外测度是 Lebesgue 外测度, 记为 \(\Lebout\). 与后面的一般外测度区分开来, 以免混淆.
+\begin{rmk}
+    对外测度的直观理解是, 我们可以用一列开区间来覆盖集合 \(X\), 这些开区间总长度可以很大, 但总是存在下界的. 外测度就是开区间长度之和的下确界. 这意味着外测度衡量了集合 \(X\) 的``大小'', 即使 \(X\) 可能是一个非常复杂的集合, 例如一个 Cantor 集.
+\end{rmk}
+\begin{ppt}
+    {外测度的基本性质}
+    设 \(\Lebout\) 是外测度函数, 则对于任意集合 \(A, B \subseteq \R\), 满足以下性质:
+    \begin{enumerate}
+        \item 非负性: \(\Lebout(A) \geq 0\);
+        \item 空集的测度为零: \(\Lebout(\varnothing) = 0\);
+        \item 单调性: 如果 \(A \subseteq B\), 则 \(\Lebout(A) \leq \Lebout(B)\);
+    \end{enumerate}
+\end{ppt}
+\begin{crl}
+    {单点集不影响外测度}
+    设 \(A\subseteq\R\) 是一个集合, \(x\in\R\) 是一个点, 则 \(\Lebout(A\cup\{x\}) = \Lebout(A)\).
+\end{crl}
+\begin{ppt}
+    [lebesgue-outer-measure-translation-invariance]
+    {外测度的平移不变性}
+    [Translation Invariance of Outer Measure]
+    设 \(A\subseteq\R\) 是一个集合, \(x\in\R\) 是一个点, 则 \(\Lebout(A+x) = \Lebout(A)\), 其中 \(A+x := \{a+x : a\in A\}\).
+\end{ppt}
+\begin{ppt}
+    [lebesgue-outer-measure-countable-subadditivity]
+    {外测度的可数次可加性}
+    [Countable Subadditivity of Outer Measure]
+    设 \(\Lebout\) 是外测度函数, 则对于任意集合 \(A, B \subseteq \R\), 满足以下性质:
+    \[\Lebout(A\cup B) \leq \Lebout(A) + \Lebout(B)\]
+    该性质对于可数个集合的并集同样适用:
+    \[\Lebout\left(\bigcup_{n=1}^\infty A_n\right) \leq \sum_{n=1}^\infty \Lebout(A_n)\]
+\end{ppt}
+\begin{prf}
+    不妨设 \(\forall k \in \N, \Lebout(E_k)<+\infty\). 则
+    \[E_1\subseteq\bigcup_{i=1}^{\infty}U_{1,i} \st \sum_{i=1}^{\infty} \ell(U_{1,i}) < \Lebout(E_1) + \varepsilon/2 \]
+    \[\cdots\]
+    \[E_k\subseteq\bigcup_{i=1}^{\infty}U_{k,i} \st \sum_{i=1}^{\infty} \ell(U_{k,i}) < \Lebout(E_k) + \varepsilon/2^k \]
+    所以
+    \[\bigcup_{k=1}^{\infty}E_k \subseteq \bigcup_{k=1}^{\infty}\bigcup_{i=1}^{\infty}U_{k,i} \st \sum_{k=1}^{\infty}\sum_{i=1}^{\infty} \ell(U_{k,i}) < \sum_{k=1}^{\infty} \Lebout(E_k) + \varepsilon\]
+    故
+    \[\Lebout\left(\bigcup_{k=1}^{\infty}E_k\right) \leq \sum_{k=1}^{\infty} \Lebout(E_k) + \varepsilon\]
+\end{prf}
+\begin{crl}
+    {外测度在分离子集中的可数可加性}
+    设 \(E_1,E_2\subseteq\R\), \(\dist(E_1,E_2)=\inf\{|x_1-x_2|:x_1\in E_1,x_2\in E_2\}>0\), 则满足可数可加性: 
+    \[\Lebout(E_1\cup E_2)=\Leb(E_1)+\Leb(E_2).\]
+\end{crl}
+\begin{prf}
+    提示: 由于 \(E_1\) 和 \(E_2\) 之间的距离大于零, 设 \(E\) 的开覆盖 \(\mathcal{I}:=\{I_i\}_{i=1}^\infty\) 可以将 \(E_1\) 和 \(E_2\) 分别覆盖在不同的开覆盖 \(\mathcal{I}_1,\mathcal{I}_2\) 上, 从而得到 \(\Lebout(E_1\cup E_2)\leq\Leb(E_1)+\Leb(E_2)\).
+\end{prf}
+\begin{dfn}
+    [null-measure-set]
+    {零测集}
+    [Null Measure Set]
+    设 \(X\subseteq\R\), 如果 \(X\) 的外测度 \(\Lebout(X)=0\), 则称 \(X\) 是一个零测集.
+\end{dfn}
+\begin{ppt}
+    {可数集合是零测集}
+    \(X\) 是可数的, 则 \(\Lebout(X)=0\).
+\end{ppt}
+\begin{ins}
+    {Cantor 集是零测集}
+    Cantor 集 \(\mathfrak{C}\) 是一个零测集, 即 \(\Lebout(\mathfrak{C})=0\).
+\end{ins}
+\begin{prf}
+    Cantor 集 \(\mathfrak{C}\) 是通过不断从区间 \([0,1]\) 中去掉中间的开区间来构造的. 在第 \(n\) 步, 从每个剩余的区间中去掉中间的开区间, 这样在第 \(n\) 步后剩余的区间总长度为 \((2/3)^n\).\\
+    因此, Cantor 集 \(\mathfrak{C}\) 的外测度为
+    \[\Lebout(\mathfrak{C}) = \lim_{n\to\infty} \qty(\frac{2}{3})^n = 0\]
+\end{prf}
+\begin{ppt}
+    {区间的外测度等于长度}
+    设 \(I\) 是 \(\R\) 中的一个区间, 则 \(\Lebout(I)=\ell(I)\).
+\end{ppt}
+\begin{prf}
+    先考察有界闭集: 设 \(I=[a,b]\) 是一个闭区间, 则对于任意 \(\varepsilon > 0\), 可以找到一个开区间 \(I_\varepsilon = (a-\varepsilon, b+\varepsilon)\) 覆盖 \(I\):\\
+    且 \(\ell(I_\varepsilon) = (b+\varepsilon) - (a-\varepsilon) = (b-a) + 2\varepsilon\).\\
+    因此, \(\Lebout(I) \leq \ell(I_\varepsilon) = (b-a) + 2\varepsilon\geq b-a\).\\
+    另一方面, 设 \(\{I_n\}_{n=1}^\infty\) 是 \(I\) 的一个开区间覆盖, 则 \(I \subseteq \bigcup_{n=1}^\infty I_n\).\\
+    由于 \(I\) 是一个闭区间, 可以从 \(\{I_n\}_{n=1}^\infty\) 中选取有限个开区间 \(I_{n_1}, I_{n_2}, \ldots, I_{n_k}\) 使得 \(I \subseteq \bigcup_{i=1}^k I_{n_i}\).\\
+    因此, \(\ell(I) = b-a \leq \sum_{i=1}^k \ell(I_{n_i}) \leq \sum_{n=1}^\infty \ell(I_n)\). 所以, \(\Lebout(I) = b-a\).\\
+    对于有界区间, 总可以使用有界闭区间来逼近: 也可以证得 \(\Lebout(I) = \ell(I)\).\\
+    对于无界区间, 例如 \(I=(a,+\infty)\), 可以使用 \(I_n=(a, a+n)\) 来逼近, 也可以证得 \(\Lebout(I) = \ell(I) = +\infty\).
+\end{prf}
+\begin{dfn}
+    [measurable-set]
+    {可测集}
+    [Measurable Set]
+    设 \(X\subseteq\R\), 如果对于任意集合 \(A\subseteq\R\), 满足以下条件:
+    \[\Lebout(A) = \Lebout(A\cap X) + \Lebout(A\setminus X) = \Lebout(A\cap X) + \Lebout(A\cap X^C)\]
+    则称 \(X\) 是一个可测集. 该条件被称为 Carathéodory 条件.\\
+    一个集合 \(X\) 上的可测集族记作 \(\Measurable(X)\). \(\R\) 上的可测集族记作 \(\Measurable(\R)\).
+\end{dfn}
+\begin{rmk}
+    由\hyperref[ppt:lebesgue-outer-measure-countable-subadditivity]{外测度的次可加性}, 可以得出 \(\Lebout(A) \leq \Lebout(A\cap X) + \Lebout(A\setminus X)\). 因此, 可测集的定义要求 \(\Lebout(A) = \Lebout(A\cap X) + \Lebout(A\setminus X)\), 这就加以了限制.\\
+    对\MeasurableSet{}的直观理解是, 可测集 \(X\) 可以将任意集合 \(A\) 分成两部分: \(A\cap X\) 和 \(A\setminus X\), 这两部分的外测度之和等于 \(A\) 的外测度. 这意味着可测集 \(X\) 不会引入任何额外的``大小'', 即使 \(X\) 可能是一个非常复杂的集合, 例如一个 Cantor 集.
+\end{rmk}
+\begin{ppt}
+    {零测集是可测集}
+    \(\Lebout(E)=0\implies E\in\Measurable\)
+\end{ppt}
+\begin{prf}
+    提示: \(\forall A, \Lebout(A)\geq\Lebout(A\cap E^c)=0+\Lebout(A\cap E^c)=\Lebout(A\cap E)+\Lebout(A\cap E^c) \)
+\end{prf}
+\begin{ppt}
+    {可测集的补集也是可测集}
+\end{ppt}
+\begin{prf}
+    显然.
+\end{prf}
+\begin{ppt}
+    {两个可测集的并集也是可测集}
+\end{ppt}
+\begin{prf}
+    设 \(E_1,E_2\in\Measurable\), 则 \(\forall A\subseteq\R\), 满足以下条件:
+    \begin{align*}
+        &\Lebout(A) \\
+        =& \Lebout(A\cap E_1) + \Lebout(A\cap E_1^c) \\
+        =& \Lebout(A\cap E_1) + \Lebout((A\cap E_1^c)\cap E_2) + \Lebout((A\cap E_1^c)\cap E_2^c) \\
+        =& \Lebout((A\cap E_1)\cup((A\cap E_1^c)\cap E_2)) + \Lebout((A\cap E_1^c)\cap E_2^c) \\
+        =& \Lebout(A\cap(E_1\cup E_2)) + \Lebout(A\cap(E_1\cup E_2)^c)
+    \end{align*}
+    因此, \(E_1\cup E_2\in\Measurable\).
+\end{prf}
+\begin{rmk}
+    根据 De Morgan 定律, \MeasurableSet{}的交/并/补/差运算也是可测集. 因此, 可测集族 \(\Measurable\) 在集合运算下是封闭的, 即其已经满足了\textbf{有限可加性}. 但对于子集运算不一定封闭.
+\end{rmk}
+\begin{thm}
+    {可测集族是一个 \(\sigma\)-代数}
+    对于可测集族 \(\Measurable\), 满足以下条件:
+    \begin{itemize}
+        \item \(\R\in\Measurable\), \(\varnothing\in\Measurable\);
+        \item 如果 \(A\in\Measurable\), 则 \(\R\setminus A\in\Measurable\)
+        \item 如果 \(\{E_n\}_{n=1}^\infty \subseteq \Measurable\), 则 \(\bigcup_{n=1}^\infty E_n \in \Measurable\)
+    \end{itemize}
+    满足 \hyperref[dfn:sigma-algebra]{\(\sigma\)-代数}的定义.
+\end{thm}
+\begin{prf}
+    我们只需要证明可数可加性: 
+    \[\{E_i\in\Measurable\}_{i=1}^\infty\implies E:=\bigcup_{i=1}^\infty E_i\in\Measurable\]
+    令
+    \[F_j:=E_j\setminus \qty(\bigcup_{i=1}^{j-1}E_i).\]
+    则 \(\{F_j\}_{j=1}^\infty\) 是一列两两不交的\MeasurableSet{}, 且 
+    \[\bigsqcup_{j=1}^\infty F_j = \bigcup_{i=1}^\infty E_i=E.\]
+    令
+    \[G_k:=\bigcup_{j=1}^{k}F_j.\]
+    \(\forall A\), \(\forall n\in\N<\infty\),
+    \[\Lebout(A)=\Lebout(A\cap G_n)+\Lebout(A\cap G_n^c)\]
+    由于 \(G_n\subseteq E\),
+    \[\geq\Lebout(A\cap G_n)+\Lebout(A\cap E^c)\]
+    根据有限可加性,
+    \[\geq\sum_{j=1}^{n}\Lebout(A\cap F_j)+\Lebout(A\cap E^c)\]
+    这时再令 \(n\to+\infty\).
+    \[\geq\sum_{j=1}^{\infty}\Lebout(A\cap F_j)+\Lebout(A\cap E^c)\]
+    再根据\hyperref[dfn:lebesgue-outer-measure]{外测度}的\hyperref[ppt:lebesgue-outer-measure-countable-subadditivity]{可数次可加性},
+    \[\geq\Lebout\left(A\cap\bigcup_{j=1}^{\infty}F_j\right)+\Lebout(A\cap E^c)=\Lebout(A\cap E)+\Lebout(A\cap E^c).\]
+\end{prf}
+\begin{ppt}
+    {区间是可测的}
+\end{ppt}
+\begin{prf}
+    不失一般性, 仅考虑 $E=(a,+\infty)$ 是可测的. 设 \(A\subseteq\R\), 不妨设 \(a\notin A\). 若 \(a\in A\), 则我们考虑 \(A\setminus\{a\}\). 
+    \[A_1:=A\cap (-\infty,a)=A\cap E^c\quad A_2:=A\cap (a,+\infty)=A\cap E\]
+    \[\forall A\subseteq\bigcup_{k=1}^{\infty}I_k, \quad I'_k:=I_k\cup(-\infty,a), I''_k:= \]
+    \[\implies A_1\subseteq\bigcup_{k=1}^{\infty}I'_k, A_2\subseteq\bigcup_{k=1}^{\infty}I''_k,\]
+    \[\implies \Lebout(A_1)+\Lebout(A_2)\leq\sum_{k=1}^{\infty}\ell(I'_k)+\sum_{k=1}^{\infty}\ell(I''_k)=\sum_{k=1}^{\infty}\ell(I_k)\]
+    \[\implies \Lebout(A\cap E)+\Lebout(A\cap E^c)\leq\sum_{k=1}^{\infty}\ell(I_k)\]
+    这时对右侧取下确界得到外测度的定义, 从而得到 \(\Lebout(A\cap E)+\Lebout(A\cap E^c)\leq\Lebout(A)\). 这就证明了 \(E\) 是可测的.
+\end{prf}
+\begin{rmk}
+    这就得到一个结论: Borel 集族 \(\Borel(\R)\) 中的每个集合都是\MeasurableSet{}. 
+\end{rmk}
+\begin{dfn}
+    [lebesgue-measure]
+    {Lebesgue 测度}
+    [Lebesgue Measure]
+    设 \(X\subseteq\R\) 是一个\MeasurableSet{}, 则 \(X\) 的 Lebesgue 测度定义为 \(\Leb(X) := \Lebout(X)\).
+\end{dfn}
+\begin{rmk}
+    \Lebesguem{}是 \hyperref[dfn:lebesgue-outer-measure]{Lebesgue 外测度}在\MeasurableSet{}上的限制. 
+\end{rmk}
+\begin{ppt}
+    [measure-countable-additivity]
+    {Lebesgue 测度的可数可加性}
+    [Countable Additivity of Lebesgue Measure]
+    对于任意可数个互不相交的\MeasurableSet{} \(A_n \subseteq \R\), 满足以下性质:
+    \[\Leb\left(\bigcup_{n=1}^\infty A_n\right) = \sum_{n=1}^\infty \Leb(A_n)\]
+\end{ppt}
+\begin{rmk}
+    [Dedicatia]
+    可数可加性是在\MeasurableSet{}上的独特性质. \\
+    相比之下, 有限可加性是对 \(\R\) 的任意不交子集都满足的, 可数次可加性也是对 \(\R\) 的任意不交子集都满足的, 但是可数次可加性要求集合必须是可测集. 
+\end{rmk}
+\begin{rmk}
+    [Dedicatia]
+    可数可加性是“最大”的可加性. 因为当基数超过可数无穷大, 就必然会产生发散的不可和子列.
+\end{rmk}
+\begin{thm}
+    [Measurability]
+    {可测性的等价表述}
+    设 \(X\subseteq\R\), 则 \(X\) 是\MeasurableSet{}等价于:
+    \begin{enumerate}[label=(\arabic*)]
+        \item \(\forall\varepsilon>0\), \(\exists\) 开集 \(U\) 使得 \(X\subseteq U\) 且 \(\Lebout(U\setminus X)<\varepsilon\);
+        \item \(\forall\varepsilon>0\), \(\exists\) 闭集 \(F\) 使得 \(F\subseteq X\) 且 \(\Lebout(X\setminus F)<\varepsilon\).
+    \end{enumerate}
+    使用 \Fsigma{}和 \Gdelta{}集的语言:
+    \begin{enumerate}[label=(\arabic*), start=3]
+        \item \(\exists\) F-sigma 集 \(F\) 使得 \(F\subseteq X\) 且 \(\Lebout(X\setminus F)=0\);
+        \item \(\exists\) G-delta 集 \(G\) 使得 \(X\subseteq G\) 且 \(\Lebout(G\setminus X)=0\).
+    \end{enumerate}
+\end{thm}
+\begin{prf}
+    我们只证明 (2) 和 (4): 可测 $\implies$ (2) \\
+    i): $\Lebout(A)<\infty$, 则 
+    \[\forall\varepsilon>0\exists\{I_k\}\st \sum_{k=1}^{\infty} \ell(I_k) < \Lebout(A) + \varepsilon\]  
+    设 \(U:=\sum\limits_{k=1}^{\infty}I_k\), 则 
+    \[\Lebout(U\setminus E)=\Lebout(U)-\Lebout(E)\leq\sum_{k=1}^{\infty} \ell(I_k) - \Lebout(E)<\varepsilon\tag{L1}\]
+    ii): $\Lebout(A)=\infty$, 则与可数列的长度为 \(1\) 的区间 \((n,n+1]\) 交运算, 得到可数的划分 \(\{E_j\}\):
+    \[\exists U_j, U_j\supseteq E_j, \Lebout(U_j\setminus E_j)<\varepsilon\cdot 2^{-j}\]
+    设 \(U:=\bigcup_{j=1}^\infty U_j\), 则 \(\Lebout(U\setminus E)=\sum_{j=1}^\infty \Lebout(U_j\setminus E_j)<\varepsilon\).\\
+    (2) $\implies$ (4) \\
+    \(\forall U_n\supseteq E \st \Lebout(U_n\setminus E)<\frac{1}{n}\) 令 \(G:=\bigcap_{n=1}^\infty U_n\), 则 \(\Lebout(G\setminus E)\leq\Lebout(U_n\setminus E)<\frac{1}{n}\). 这时再令 \(n\to\infty\).\\
+    (4) $\implies$ 可测 
+    \[E=G\cap(G\setminus E)^c\]
+    其中 \(G\) 是 G-delta 集, \(G\setminus E\) 是零测集, 则 \(E\) 是可测集.
+\end{prf}
+\begin{rmk}
+    对任意集合 \(E\), 都可以找到一个 G-delta 集 \(G\) 使得 \(E\subseteq G\) 且 \(\Lebout(G\setminus E)=0\). \\
+    在等式 (L1) 中直接使用外测度相减即可. 其中 \(E\) 允许不可测.\\
+    这说明 G-delta 集族在可测集族中是稠密的. 同样地, F-sigma 集族在可测集族中也是稠密的. 但是 F-sigma 集中不允许 \(E\) 不可测.
+\end{rmk}
+\begin{thm}
+    [littlewood-first]
+    {Littlewood 第一原理 / 可测集差不多是有限开区间的并}
+    设 \(E\subseteq\R\), \(\Leb(E)<+\infty\). 则 \(\forall\varepsilon>0\), 有一列有限的开区间 \(I_1, I_2, \ldots, I_n\) 使得 
+    \[O:=\bigsqcup_{i=1}^n I_i, \quad \Lebout(E\setminus O)+\Lebout(O\setminus E)<\varepsilon\]
+    使用对称差记号, 则
+    \[\Lebout(E\triangle O)<\varepsilon\]
+\end{thm}
+\begin{rmk}
+    这个定理说明, 有限测度的集合总可以用开区间的有限并来近似. 这说明\MeasurableSet{}差不多是开集, 只是可能在一个任意小的测度的集合上有所不同. 
+\end{rmk}
+\begin{rmk}
+    Littlewood 的三个原理分别是:
+    \begin{enumerate}
+        \item \MeasurableSet{}差不多是开集; 这一点在\hyperref[thm:littlewood-first]{Littlewood 第一原理}中得到了体现;
+        \item \MeasurableFunc{}差不多是连续函数; 这一点是\hyperref[thm:lusin]{Lusin 定理}的内容;
+        \item 逐点收敛差不多是一致收敛. 这一点是\hyperref[thm:egorov]{Egorov 定理}的内容.
+    \end{enumerate}
+\end{rmk}
+\begin{prf}
+    设开集 \(V\supseteq E\) 使得 \(\Leb(V\setminus E)<\frac{\varepsilon}{2}\). 
+    \[\Leb(V)=\Leb(E)+\Leb(V\setminus E)<+\infty\]
+    由于开集可以用一列两两不交的开区间并得到, 记 \(V=\bigsqcup_{k=1}^N I_k\), 其中 \(N\) 允许为 \(\infty\). 如果 \(N<\infty\), 则直接取 \(O=V\) 即可. 
+    如果 \(N=+\infty\), 
+    \[\Leb(V)=\sum_{k=1}^\infty \ell(I_k)<+\infty\]
+    则存在 \(n\in\N\) 使得 \(\sum_{k=n+1}^\infty \ell(I_k)<\frac{\varepsilon}{2}\). 即: 截断的项之后的余项可以无限小. 这时取 \(O:=\bigsqcup_{k=1}^n I_k\) 即可完成证明.
+\end{prf}
+\subsection{不可测集的构造}
+\begin{dfn}
+    {升列 / 降列}
+    [Increasing / Decreasing Sequence]
+    设 \(\{A_n\}_{n=1}^\infty\) 是 \(\R\) 的一个集合列, 如果满足 \(A_1 \subseteq A_2 \subseteq A_3 \subseteq \cdots\), 则称 \(\{A_n\}_{n=1}^\infty\) 是一个升列. 
+    如果满足 \(A_1 \supseteq A_2 \supseteq A_3 \supseteq \cdots\), 则称 \(\{A_n\}_{n=1}^\infty\) 是一个降列.
+\end{dfn}
+\begin{ppt}
+    {测度的上连续性}
+    \textbf{可测升列的测度极限等于极限测度.}\\
+    设 \(\{E_n\}_{n=1}^\infty\) 是一个可测升列, 则 
+    \[\Leb\left(\bigcup_{n=1}^\infty E_n\right) = \lim_{n\to\infty} \Leb(E_n)\].
+\end{ppt}
+\begin{ppt}
+    {测度的下连续性}
+    \textbf{可测降列的测度极限等于极限测度.}\\
+    设 \(\{E_n\}_{n=1}^\infty\) 是一个可测降列, \(\Leb(E_1)<\infty\), 则 
+    \[\Leb\left(\bigcap_{n=1}^\infty E_n\right) = \lim_{n\to\infty} \Leb(E_n)\].
+\end{ppt}
+\begin{prf}
+    令 \(G_i:=E_1\setminus E_i\). 则 \(\{G_i\}_{i=1}^\infty\) 是一个可测升列且 \(\Leb(G_i)=\Leb(E_1)-\Leb(E_i)\), 因此这两个定理是等价的. 我们仅证明 (1).\\
+    不妨设 \(\Leb(E_i)<\infty\). 则设 
+    \[F_i:=E_i\setminus E_{i-1}. \qquad \bigcup_{i=1}^{\infty}E_i=\bigsqcup_{i=1}^{\infty}F_i\]
+    \[\Leb\qty(\bigcup_{i=1}^{\infty}E_i)=\Leb\qty(\bigsqcup_{i=1}^{\infty}F_i)=\sum_{i=1}^{\infty}\Leb(F_i)=\sum_{i=1}^{\infty}\qty(\Leb(E_i)-\Leb(E_{i-1}))=\lim_{n\to\infty} \Leb(E_n)\]
+\end{prf}
+\begin{crl}
+    {可测集列的测度极限小于等于极限测度}
+    一列\MeasurableSet{} \(\{E_i\}_{i=1}^\infty\) 满足
+    \[\Leb(\liminf E_i)\leq \liminf \Leb(E_i).\]
+\end{crl}
+\begin{prf}
+    令 \(G_i:=\bigcup_{j=i}^\infty E_j\). 则 \(\{G_i\}_{i=1}^\infty\) 是一个可测降列且 \(\Leb(G_i)\leq \bigcup_{j\geq i}^\infty \Leb(E_j)\), 因此
+    \[\Leb(\liminf E_i)=\Leb\qty(\bigcup_{i=1}^\infty G_i)=\lim_{i\to\infty} \Leb(G_i)\leq \liminf \Leb(E_i)\]
+\end{prf}
+\begin{rmk}
+    任意集函数 \(\mu:\{\cdot\}\to\R\) 都具有两个性质:
+    \begin{itemize}
+        \item \textbf{上半连续性}: \(\mu(\limsup E_i)\geq \limsup \mu(E_i)\);
+        \item \textbf{下半连续性}: \(\mu(\liminf E_i)\leq \liminf \mu(E_i)\).
+    \end{itemize}
+    测度也是集函数, 自然也满足这两种性质. 但是测度还具有上连续性与下连续性. 
+    \tcbline
+    其中, \textbf{测度的上连续性需要有限测度的限制}, 而下连续性不需要. 这也是为什么很多定理只在有限测度的时候成立, 例如 \hyperref[thm:egorov]{Egorov 定理}.
+\end{rmk}
+\begin{dfn}
+    [ae]
+    {几乎处处成立}
+    [Almost Everywhere]
+    设 \(P\) 是一个命题, 如果存在一个零测集 \(Z\) 使得 \(P\) 在 \(R\setminus Z\) 上成立, 则称 \(P\) 在 \(R\) 上\textbf{几乎处处成立}. 一般我们要求 \(R\) 是可测的.
+\end{dfn}
+\begin{thm}
+    [borel-cantelli]
+    {Borel-Cantelli 引理}
+    [Borel-Cantelli Lemma]
+    设 \(\{E_n\}_{n=1}^\infty\) 是一列\MeasurableSet{}, 满足测度和有限 \(\sum_{n=1}^\infty \Leb(E_n)<+\infty\), 则对几乎处处的 \(x\in\R\), \(x\) 仅属于至多有限个 \(E_n\).
+\end{thm}
+\begin{prf}
+    令 \(G_k:=\bigcup_{k=1}^{\infty}E_k\) 则 \(\{G_k\}_{k=1}^\infty\) 是一个可测降列且 \(\Leb(G_k)\leq \sum_{i=k}^\infty \Leb(E_i)\). 因此, 
+    \[\Leb(\limsup E_i) = \Leb\qty(\bigcup_{i=1}^{\infty}G_i)=\lim_{k\to\infty} \Leb(G_k)\leq \lim_{k\to\infty} \sum_{i=k}^\infty \Leb(E_i)=0\]
+    这就说明了属于无限多个 \(E_i\) 的 \(x\) 的集合是一个零测集, 从而对于几乎处处的 \(x\), \(x\) 仅属于至多有限个 \(E_n\).
+\end{prf}
+\begin{thm}
+    {平移不相交的有界可测集为零}
+    设 \(E\) 是 \(\R\) 的有界\MeasurableSet{}, 若存在可数的有界指标集 \(I\) 使得 \(\{E_\lambda:E+\lambda\}_{\lambda\in I}\) 两两不交, 则 \(\Leb(E)=0\).
+\end{thm}
+\begin{prf}
+    提示: 测度具有平移不变性. 结合有界性.
+\end{prf}
+\begin{rmk}
+    [Dedicatia]
+    该定理说明了, 如果一个有界可测集 \(E\) 的平移版本 \(E+\lambda\) 可以在 \(\R\) 中形成一个两两不交的集合列, 则 \(E\) 必须是一个零测集.\\
+    这和我们直观上的理解是一致的: 如果 \(E\) 的测度大于零, 那么它的平移版本 \(E+\lambda\) 也会有相同的测度. 因此, 如果存在一个可数的有界指标集 \(I\) 使得 \(\{E_\lambda:E+\lambda\}_{\lambda\in I}\) 两两不交, 则这些集合的总测度将是无穷大的, 这与 \(\R\) 的有限测度矛盾.
+\end{rmk}
+\begin{dfn}
+    {有理等价类}
+    [Rational Equivalence Class]
+    设 \(x,y\in\R\), 如果 \(x-y\in\Q\), 则称 \(x\) 和 \(y\) 是有理等价的. \\
+    所有有理等价类的集合记为 \(\R/\Q\).
+\end{dfn}
+\begin{thm}
+    [non-measurable-set]
+    {不可测集的构造}
+    \(\R\) 上存在不可测集.\\
+    \(\forall E\in\R\), \(\mathscr{F}\) 是 \(\R\) 上所有有理等价类的集合族.\\
+    根据选择公理, 可以从每个有理等价类中选取一个代表元素, 从而得到一个集合 \(V(E)\subseteq E\). 则 \(V(E)\) 是 \(\R\) 上的一个不可测集.
+\end{thm}
+\begin{prf}
+    \(V(E)\) 满足: (i) \(\forall c,d\in V(E)\), \(d-c\notin\Q\). \(\Longleftrightarrow\) \(\forall I\subseteq\Q, \{V(E)+\lambda\}_{\lambda\in I}\) 两两不交;\\
+    (ii) \(\forall x\in E, \exists c\in V(E), \exists q\in\Q, \st x=c+q\). 
+\end{prf}
+\begin{thm}
+    [vitali-set]
+    {Vitali 集}
+    [Vitali Set]
+    设 \(E\subseteq\R\), \(\Leb(E)>0\), 则 \(\exists V\subsetneq E\), 使得 \(V\) 是一个不可测集. \\
+    该集合被称为 \(E\) 的一个 Vitali 集.
+\end{thm}
+\begin{prf}
+    反证: 如果 \(E\) 的每个子集都是可测的, 则根据选择公理, 可以从 \(\R/\Q\) 中选取一个代表元素集合 \(V\). 则 \(\{V+\lambda\}_{\lambda\in\Q}\) 是 \(\R\) 上一个两两不交的集合列. \\
+    由于 \(E\) 中的每个元素都可以表示为 \(V+\lambda\) 的形式, 因此 \(E \subseteq \bigcup_{\lambda\in\Q} (V+\lambda)\). \\
+    这时根据前一个定理, \(V\) 必须是一个零测集. 这与 \(\Leb(E)>0\) 矛盾.
+\end{prf}
+\begin{crl}
+    {外测度的不可加性}
+    设 \(A,B\subseteq\R\), \(A\cap B=\varnothing\), 则存在 \(\Lebout(A\cup B)<\Lebout(A)+\Lebout(B)\).
+\end{crl}
+\begin{prf}
+    \(\forall X,E\subseteq\R \), 令 \(A=X\cap E\), \(B=X\cap E^c\), 反证: 假设等号成立, 这就说明了 \(E\) 是可测的. 这就得到了所有的集合都是可测的, 从而与不可测集的存在矛盾.
+\end{prf}
+\begin{rmk}
+    这就说明了, 外测度的可数次可加性不能推广到所有集合上的可数可加性.
+\end{rmk}
+\begin{dfn}
+    [cantor-lebesgue-function]
+    {Cantor-Lebesgue 函数}
+    定义函数 \(\phi:\mathfrak{C}\to [0,1]\): 它将三分的 Cantor 集 \(\mathfrak{C}\) 中的每个点 \(x\) 映射到 \([0,1]\) 中的一个点 \(\phi(x)\), 其中 \(\phi(x)\) 的二进制表示由 \(x\) 的三进制表示中的数字 0 和 2 转换而来: 将三进制表示中的每个 0 替换为二进制的 0, 每个 2 替换为二进制的 1.\\
+    用公式表示为:
+    \[\phi:\qquad\begin{matrix}
+        \mathfrak{C} &\to &[0,1]\\
+        \sum_{n=1}^{\infty} a_n 3^{-n} &\mapsto& \sum_{n=1}^{\infty} \frac{a_n}{2} 2^{-n}
+    \end{matrix}\]
+    这时我们可以将 \(\phi\) 定义域延拓到整个区间 \([0,1]\) 上, 使得 \(\phi\) 在 \(\mathfrak{C}\) 上保持原定义, 在 \([0,1]\setminus\mathfrak{C}\) 上保持常数值. 这样得到的函数仍然被称为 Cantor-Lebesgue 函数.
+\end{dfn}
+\begin{ppt}
+    {Cantor-Lebesgue 函数的性质}
+    Cantor-Lebesgue 函数 \(\phi\) 满足以下性质:
+    \begin{itemize}
+        \item \(\phi\) 是一个连续函数;
+        \item \(\phi\) 是一个单调递增函数, 但它的导数几乎处处为零;
+        \item \(\phi\) 将 Cantor 集 \(\mathfrak{C}\) 映射到整个区间 \([0,1]\);
+        \item \(\phi\) 是满射.
+    \end{itemize}
+\end{ppt}
+\subsection{由 Borel 集族定义的测度}
+\begin{xmp}
+    [borel]
+    {Borel \(\sigma\)-代数}
+    [Borel \(\sigma\)-algebra]
+    设 \((X,\tau)\) 是一个拓扑空间, 则 \(X\) 的 Borel \(\sigma\)-代数是包含 \(X\) 的所有开集的最小 \(\sigma\)-代数. 记为 \(\Borel(X)\).\\
+    定义一个集合 \(B\) 是 \(X\) 的 \textbf{Borel 集}当且仅当 \(B\in\Borel(X)\).
+\end{xmp}
+\begin{ins}
+    {\(\R\) 上的 Borel \(\sigma\)-代数}
+    \(\R\) 上的 Borel \(\sigma\)-代数 \(\Borel(\R)\) 是包含 \(\R\) 中所有开集的最小 \(\sigma\)-代数. \\
+    其构造过程如下:
+    \begin{enumerate}[label=(\roman*)]
+        \item 取 \(\R\) 中所有开集;
+        \item 对这些开集进行补运算, 得到所有闭集;
+        \item 对这些开集和闭集进行可数次的并运算和交运算. 开集的可数并运算仍然得到开集, 闭集的可数交运算仍然得到闭集. \\
+            所以我们关注: 开集的可数交运算得到 F-sigma 集, 闭集的可数并运算得到 G-delta 集;
+        \item 继续对 F-sigma 集取可数交, 对 G-delta 集取可数并, 得到更复杂的集合. 继续进行下去, 最后得到的集合族就是 \(\Borel(\R)\).
+    \end{enumerate}
+    这个过程一直持续到超限序数 \(\omega_1\) 才能结束可数的归纳. 因此, Borel 集族的结构十分丰富.
+\end{ins}
+\begin{dfn}
+    {Borel 测度}
+    [Borel Measure]
+    Borel \(\sigma\)-代数中的集合的\hyperref[dfn:lebesgue-outer-measure]{外测度}称为 \textbf{Borel 测度}.
+\end{dfn}
+\begin{ppt}
+    [BorelOfMeasurable]
+    {Borel 集是可测集}
+    设 \(B\) 是 \(\R\) 的一个 \hyperref[xmp:borel]{Borel 集}, 则 \(B\) 是\MeasurableSet{}.\\
+    特别地, 所有开集和闭集都是\MeasurableSet{}.
+\end{ppt}
+\begin{ppt}
+    {Borel 集的同胚映射的像也是 Borel 集}
+\end{ppt}
+\begin{rmk}
+    [Dedicatia]
+    虽然 Borel 集族已经十分丰富, 但是它不是完备的. 例如 Cantor 集是 Borel 集, 但它的子集数目极其庞大, 存在不具有 Borel 测度的子集, 因为我们定义的时候并没有要求 Borel 集族对子集封闭, 但是直观感觉上这应该成立, 所以这就是我们将 Borel 集族扩展到可测集族的原因.
+\end{rmk}
+\begin{dfn}
+    {通过 Borel 集族定义的可测集}
+    [Measurable Set Defined by Borel \(\sigma\)-algebra]
+    设 \(X\subseteq\R\), 如果 \(X\) 可以表示为 \(B\cup Z\), 其中 \(B\) 是 \hyperref[xmp:borel]{Borel 集}, \(Z\) 是一个零测集的子集, 则称 \(X\) 是\MeasurableSet{}. 其测度定义为 \(\Leb(X) := \Leb(B)\).
+\end{dfn}
+\begin{ppt}
+    {可测集的等价定义}
+    设 \(X\subseteq\R\), 则 \(X\) 是\MeasurableSet{}等价于: \(\exists A,B\in\Borel(\R), \st \Leb(A)=\Leb(B) \land A\subseteq X\subseteq B\).
+\end{ppt}
+\begin{rmk}
+    我们有如下包含关系:
+    \[\tau_{\R}\subset\Borel(\R)\subset\Measurable(\R)\subset\mathcal{P}(\R)\]
+\end{rmk}
+\begin{cxmp}
+    {连续映射不保持零测性}
+    考虑定义在 \([0,1]\) 上的 \hyperref[dfn:cantor-lebesgue-function]{Cantor-Lebesgue 函数} \(f\): 该函数在 Cantor 集上是线性递增的, 在 Cantor 集的补集上是常数. 则 \(f\) 将 \([0,1]\) 映到 \([0,1]\) 且是连续函数. \\
+    由于 \(f(\mathfrak{C})\) 是一列开区间的并, 具有正的测度, 则 \(f\) 将一个零测集 \(\mathfrak{C}\) 映到一个非零测集 \(f(\mathfrak{C})\). 这说明连续映射不保持零测性.
+\end{cxmp}
+\begin{cxmp}
+    {Lebesgue 可测集不一定是 Borel 集}
+    考虑定义在 \([0,1]\) 上的 \hyperref[dfn:cantor-lebesgue-function]{Cantor-Lebesgue 函数} \(f\). 设 \(g(x):=f(x)+x\) 这样就保证了严格的单调性, 也就保证了双射.\\
+    则 \(g\) 是从 \([0,1]\) 到 \([0,2]\) 的同胚映射. 根据测度的平移不变性, \(g\) 将 \([0,1]\setminus\mathfrak{C}\) 映到 \([0,2]\setminus g(\mathfrak{C})\).\\
+    其中 \(\Leb([0,1]\setminus\mathfrak{C})=\Leb([0,1])-\Leb(\mathfrak{C})=1-0=1\). 根据测度的有限可加性, \(\Leb(g(\mathfrak{C}))=\Leb(g([0,1]))-\Leb(g(\Leb([0,1])-\Leb(\mathfrak{C})))=2-1=1\).\\
+    而任何可测集必然有不可测的子集, 因此取 \(g(\mathfrak{C})\) 中的不可测子集 \(V\), 其原像一定存在, 是 \(g^{-1}(V)\). 则 \(g^{-1}(V)\subseteq\mathfrak{C}\). 由于 \(\mathfrak{C}\) 是一个零测集, 则 \(g^{-1}(V)\) 是一个零测集, 从而是一个\MeasurableSet{}. 但是同胚映射不可能将 Borel 集映到不可测集. 从而 \(g^{-1}(V)\) 不是 Borel 集.
+\end{cxmp}
+\section{Lebesgue 积分理论}
+\subsection{可测函数}
+\begin{dfn}
+    [measurable-function]
+    {可测函数}
+    [Measurable Function]
+    设 \(f:\R\to\R\) 是一个函数, 如果对于任意实数 \(a\), 集合 \(\{x\in\R: f(x)>a\}\) 是一个\MeasurableSet{}, 则称 \(f\) 是一个\textbf{可测函数}.
+\end{dfn}
+\begin{ppt}
+    {可测函数的等价定义}
+    设 \(f\) 是\MeasurableFunc{}, 则以下定义等价:
+    \begin{enumerate}
+        \item \(\forall a\in\R, \{x\in\R: f(x)>a\}\) 是可测集;
+        \item \(\forall a\in\R, \{x\in\R: f(x)\geq a\}\) 是可测集;
+        \item \(\forall a\in\R, \{x\in\R: f(x)<a\}\) 是可测集;
+        \item \(\forall a\in\R, \{x\in\R: f(x)\leq a\}\) 是可测集.
+    \end{enumerate}
+\end{ppt}
+\begin{prf}
+    我们只证明 (1) $\implies$ (2). \\
+    \(\{x\in\R: f(x)\geq a\}=\bigcap_{n=1}^\infty \{x\in\R: f(x)>a-\frac{1}{n}\}\) 是可测集.\\
+    (2) $\implies$ (1). \\
+    \(\{x\in\R: f(x)>a\}=\bigcup_{n=1}^\infty \{x\in\R: f(x)\geq a+\frac{1}{n}\}\) 是可测集.
+\end{prf}
+\begin{rmk}
+    这里定义的可测函数实际上是将 Borel 可测集拉回 Lebesgue 可测集的函数.
+    \tcbline
+    如果 \(f\) 可测, 则对任意实数 \(a\), 集合 \(\{x\in\R: f(x)=a\}\) 也是可测集. 因为 \(\{x\in\R: f(x)=a\}=\{x\in\R: f(x)\geq a\}\cap \{x\in\R: f(x)\leq a\}\). \\
+    但是反之不成立. 即使函数在每一个水平线 \(y=a\) 上都是\MeasurableSet{}, 也不保证函数是\MeasurableFunc{}. 例如, 取 \([0,1]\) 上的 \hyperref[dfn:vitali-set]{Vitali 集} \(V\). 由于 \(V\) 和 \([0,1]\setminus V\) 的基数都是不可数无穷的, 所以可以用一个双射将 \(V\) 映到 \([0, +\infty)\), 将 \([0,1]\setminus V\) 映到 \((-\infty, 0)\). \\
+    这个函数在每一条水平线上都是单点集, 自然是可测集. 但是该函数不是可测的, 因为某个原像 \(\{x\in\R: f(x)>0\}=V\) 不是可测集.
+\end{rmk}
+\begin{ppt}
+    {可测函数的判别}
+    \(f:E\to\R\) 可测当且仅当 \(\forall U\in\tau(\R)\), \(f^{-1}(U)\) 是\MeasurableSet{}.\\
+    即\MeasurableFunc{}的逆保持开集可测性.
+\end{ppt}
+\begin{ppt}
+    {连续函数是可测函数}
+    这是因为连续函数总将 Borel 可测集拉回 Borel 可测集. 而 Borel 可测集是\MeasurableSet{}.
+\end{ppt}
+\begin{ppt}
+    {可测函数复合连续函数是可测函数}
+    设 \(f:E\to\R\) 是一个\MeasurableFunc{}, \(g:f(E)\to\R\) 是一个连续函数, 则 \(g\circ f:E\to\R\) 也是一个\MeasurableFunc{}.
+\end{ppt}
+\begin{rmk}
+    不能反着复合.
+\end{rmk}
+\begin{ppt}
+    {几乎处处相等保持可测性}
+\end{ppt}
+\begin{crl}
+    {几乎处处收敛的可测函数列的极限函数也是可测函数}
+    设 \(f_n\) 是一列\MeasurableFunc{}, \(f_n\aelim f\) 在 \(E\) 上成立, 则 \(f\) 也是一个\MeasurableFunc{}.
+\end{crl}
+\begin{ppt}
+    {可测函数的分解}
+    \(f\) 在 \(E\) 上可测当且仅当 \(f\) 在 \(E_1\) 和 \(E\setminus E_1\) 上都可测.
+\end{ppt}
+\begin{ppt}
+    {可测函数的运算}
+    \(f,g\) 是\MeasurableFunc{}, \(f,g\) 几乎处处有限, 则 \(\alpha f+\beta g\), \(fg\) 都是可测的.
+\end{ppt}
+\begin{prf}
+    我们只考虑 \(f+g\) 的情况. 考察 \(\{x\in\R: f(x)+g(x)>a\}\). 由于 \(f,g\) 几乎处处有限, 则 \(\{x\in\R: f(x)+g(x)>a\}=\bigcup_{q\in\Q} \{x\in\R: f(x)>q\}\cap \{x\in\R: g(x)>a-q\}\) 是\MeasurableSet{}.
+\end{prf}
+\begin{ppt}
+    {可测函数列取最大最小值的函数也是可测函数}
+    设 \(f,g\) 是\MeasurableFunc{}, 则 \(\max\{f,g\}\) 和 \(\min\{f,g\}\) 都是\MeasurableFunc{}.
+\end{ppt}
+\begin{ppt}
+    {可测函数的绝对值也是可测函数}
+    设 \(f\) 是\MeasurableFunc{}, 则 \(|f|\) 也是\MeasurableFunc{}.
+\end{ppt}
+\begin{cxmp}
+    {绝对值可测的函数不一定是可测函数}
+    定义函数 \(f:[0,1]\to\R\) 如下:
+    \[f(x):=\begin{cases}
+    1, & x\in V\\
+    -1, & x\in [0,1]\setminus V
+    \end{cases}\]
+    其中 \(V\) 是 \([0,1]\) 上的一个 \hyperref[thm:vitali-set]{Vitali 集}. 则 \(f\) 的绝对值 \(|f|\) 是一个常数函数, 因此是可测的. 但是 \(f\) 本身不是可测的, 因为 \(V=\{x\in[0,1]: f(x)>0\}\) 不是可测集.
+\end{cxmp}
+\begin{dfn}
+    [characteristic-function]
+    {特征函数}
+    [Characteristic Function]
+    设 \(E\subseteq\R\), 则定义函数 \(\chi_E:\R\to\{0,1\}\) 如下:
+    \[\Char{E}(x):=\begin{cases}
+    1, & x\in E\\
+    0, & x\notin E
+    \end{cases}\]
+    则称 \(\Char{E}\) 是集合 \(E\) 的特征函数.
+\end{dfn}
+\begin{ppt}
+    {特征函数是可测函数当且仅当集合是可测集}
+\end{ppt}
+\begin{dfn}
+    [simple-function]
+    {简单函数}
+    [Simple Function]
+    设 \(E\subseteq\R\), 如果函数 \(f:E\to\R\) 是简单函数, 当且仅当 \(f\) 仅取有限个值. \\
+    也就是说 \(f\) 可以表示为
+    \[f(x)=\sum_{i=1}^n c_i \Char{E_i}(x)\]
+    其中 \(c_i\) 是实数, \(E_i:=\{x\in E, f(x)=c_i\}\) 是 \(E\) 的可测子集, \(i=1,2,\ldots,n\). 
+\end{dfn}
+\begin{thm}
+    [approximated-by-simple-function]
+    {简单函数逼近有界可测函数}
+    设 \(f\) 是有界的\MeasurableFunc{}, 则: \(\forall\varepsilon>0\), 存在\SimpleFunc{} \(\phi_\varepsilon, \psi_\varepsilon\) 使得 \(\phi_\varepsilon \leq f \leq \psi_\varepsilon\) 且 \(0 \leq\psi_\varepsilon - \phi_\varepsilon < \varepsilon\).
+\end{thm}
+\begin{prf}
+    设 \(f(E)\in[c,d]\). 则 \([c,d]\) 可以分割为 \(n\) 个长度为 \(\frac{d-c}{n}<\varepsilon\) 的区间 \([c+\frac{i-1}{n}(d-c), c+\frac{i}{n}(d-c))\), \(i=1,2,\ldots,n\). 设为 \(c=y_0<y_1<\cdots<y_n=d\). \\
+    令 \(I_k:=[y_{k-1},y_k)\), \(E_k:=f^{-1}(I_k)\). 定义 \(\phi_\varepsilon:=\sum_{i=1}^n y_{i-1} \Char{E_i}(x)\), \(\psi_\varepsilon:=\sum_{i=1}^n y_i \Char{E_i}(x)\) 即可完成证明.
+\end{prf}
+\begin{rmk}
+    若 \(f\) 是无界的, 则不可这样证明.
+\end{rmk}
+\begin{thm}
+    [approximation-theorem]
+    {逼近定理}
+    设 \(f\) 是\MeasurableFunc{}, 当且仅当存在\SimpleFunc{}列 \(\{\phi_n\}_{n=1}^\infty\) 使得 \(\phi_n\) 逐点收敛到 \(f\) 且 \(|\phi_n|\leq |f|\). 如果 \(f\) 是非负的, 则可以要求 \(\phi_n\) 也是非负且递增的.
+\end{thm}
+\begin{prf}
+    我们只证明 $\implies$. \\
+    定义 \(f=f_+-f_-\), \(|f|=f_++f_-\). 所以不失一般性可以设 \(f\) 是非负的.\\
+    令 \(E_y:=\{x\in E, f(x)\leq y\}\) 将 \(f\) 限制在 \(E_y\) 上, 则 \(\exists \phi_y,\psi_y\) s.t. \(0\leq\phi_y \leq f \leq \psi_y\) 且 \(0\leq \psi_y-\phi_y<\frac{1}{y}\).\\
+    延拓 \(\phi_y\): 
+    \[\phi_y(x):=\begin{cases}
+    \phi_y(x), & x\in E_y\\
+    y, & x\in E\setminus E_y
+    \end{cases}\]
+    任意固定 \(x\in E\):\\
+    若 \(f(x)\) 是有限的, 则存在 \(y_0\) 使得 \(f(x)\leq y_0\), 则 \(y>y_0\) 时, \(\phi_y(x)\to f(x)\) 当 \(y\to\infty\).\\
+    若 \(f(x)\) 是无界的, 则 \(\forall x\notin E_n, \implies \phi_y(x)=n\implies \lim_{y\to\infty}\phi_y(x)=+\infty=f(x)\).\\
+    这就说明了 \(\phi_y\) 逐点收敛到 \(f\). 取 \(\phi_n:=\max\{\phi_y\}\) (这显然也都是\SimpleFunc{}) 即可完成证明.
+\end{prf}
+\begin{thm}
+    [littlewood-third]
+    {Littlewood 第三原理 / Egorov 定理}
+    几乎处处收敛差不多是一致收敛.\\
+    设 \(E\) 是\MeasurableSet{}, \(\Leb(E)<\infty\), \(f:E\to\R\), \(f_n\to f\) 则 \(\forall\eta,\delta>0, N>0\), 存在一个\MeasurableSet{} \(A\subseteq E\) 
+    使得 \(\Leb(E\setminus A)<\delta\), \(\forall N\geq n,x\in A, |f_n(x)-f(x)|<\eta\). 
+\end{thm}
+\begin{prf}
+    令 \(E_n:=\{x\in E, |f_k(x)-f(x)|<\eta,\ \forall k\geq n\}\). 则 \(\{E_n\}_{n=1}^\infty\) 是一个可测升列, 由于 \(f_n\aelim f\), \(\bigcup_{n=1}^\infty E_n=E\). \\
+    因此 \(\lim_{n\to\infty} \Leb(E_n)=\Leb(E)\). 这时存在 \(N\) 使得 \(\Leb(E_{N})>\Leb(E)-\delta\). 取 \(A=E_{N}\) 即可完成证明.
+\end{prf}
+\begin{thm}
+    [egorov]
+    {Egorov 定理}
+    [Egorov's Theorem]
+    设 \(E\) 是\MeasurableSet{}, \(\Leb(E)<\infty\), \(f:E\to\R\), \(f_n\to f\) 则 \(\forall\varepsilon>0\), 存在闭集 \(F\subseteq E\) 使得 \(\Leb(E\setminus F)<\varepsilon\), \(f_n\rightrightarrows f\).
+\end{thm}
+\begin{prf}
+    令 \(\eta=\frac{1}{n}\), \(\delta=\frac{\varepsilon}{2^{n+1}}\) 可以得到一个\MeasurableSet{} \(A_n\subseteq E\) 使得 \(\Leb(E\setminus A_n)<\frac{\varepsilon}{2^{n+1}}\), \(\forall N\geq k,x\in A_n, |f_k(x)-f(x)|<\frac{1}{n}\). 取 \(F=\bigcap_{n=1}^\infty A_n\), 则满足一致收敛的条件, 且\MeasurableSet{}与闭集之间相差无穷小, 即可完成证明.
+\end{prf}
+\begin{rmk}
+    \(\Leb(E)<\infty\) 不可去. 考虑反例:
+    \[f:=\Char{[-n,n]}, E=\R, f=1\]
+    若 \(\Leb(E)=\infty\), 则存在闭集 \(F_M\subseteq E \st \Leb(F_m)>M\), 使得一致收敛的范围可以任意大, 但补集不能任意小.
+\end{rmk}
+\begin{thm}
+    [lusin]
+    {Littlewood 第二原理 / Lusin 定理}
+    \MeasurableFunc{}差不多是连续函数.\\
+    设 \(f\) 是可测函数, 则 \(\forall\varepsilon>0 \), 存在闭集 \(F\subseteq E\) 和连续函数 \(g:\R\to\R\) 使得 \(\Leb(E\setminus F)<\varepsilon\), \(f(x)=g(x)\) 在 \(F\) 上恒成立.
+\end{thm}
+\begin{prf}
+    先考虑 \(f\) 是\SimpleFunc{}. 即为
+    \[f(x)=\sum_{i=1}^n c_i \Char{E_i}(x)\]
+    \(\forall 1\leq i\leq n\), \(\exists F_i\subseteq E_i\) 是一个闭集, \(\Leb(E_i\setminus F_i)<\frac{\varepsilon}{n}\). \\
+    取 \(F=\bigcup_{i=1}^n F_i\), 则显然 \(\Leb(E\setminus F)<\varepsilon\). \\
+    \(g:F\to\R\) 定义为 \(g(x)=f(x)\). 则 \(g\) 显然是一个连续函数. 接下来我们作延拓: \(\R\setminus F\) 是开集, 可以表示为一列开区间的并. 
+    在每个开区间上, \(g\) 可以定义为一个线性函数, 使得 \(g\) 在区间的端点处与 \(f\) 的值相等. 这样就得到了一个连续函数 \(g:\R\to\R\), 且在 \(F\) 上与 \(f\) 恒等.\\
+    接下来考虑 \(f\) 是\MeasurableFunc{}. 不失一般性仍可取 \(\Leb(E)\) 是有限的, 因为无限测度的集合总可以表示为一列有限测度集合的并. \\
+    根据简单函数逼近定理, 存在简单函数列 \(\{\phi_n\}_{n=1}^\infty\),  \(\forall F_n\subseteq E\), 存在连续函数 \(g_n:\R\to\R\) 使得 \(\Leb(E\setminus F_n)<\frac{\varepsilon}{2^{n+1}}\), \(\phi_n(x)=g_n(x)\) 在 \(F_n\) 上恒成立. 
+    由 Egorov 定理, 可存在 \(F_0\subseteq E\) s.t. \(\Leb(E\setminus F_0)<\frac{\varepsilon}{2}\), \(f_n\rightrightarrows f\) 在 \(F_0\) 上. 这时令 \(F:=\bigcup_{i=0}^{\infty}F_n\): 则即可保证 \(g_n\) 提供的连续性和 \(\phi_n\) 提供的一致收敛, 从而保证 \(f\) 是连续函数.
+\end{prf}
+\subsection{非负 Lebesgue 积分}
+\begin{dfn}
+    {简单函数的 Lebesgue 积分}
+    设 
+    \[\phi(x) = \sum_{k=1}^n c_k\Char{E_k}(x)\]
+    则其 Lebesgue 积分定义为
+    \[\int \phi(x) := \sum_{k=1}^n c_k \Leb(E_k)\]
+\end{dfn}
+\begin{ppt}
+    {Lebesgue 积分具有线性性}
+    设 \(\phi,\psi\) 是\SimpleFunc{}, \(\alpha,\beta:\R\), 则 \(\int (\alpha\phi+\beta\psi) = \alpha \int \phi + \beta \int \psi\).
+\end{ppt}
+\begin{ppt}
+    {Lebesgue 积分具有可加性}
+    设 $E\cap F=\varnothing$ 都是\MeasurableSet{}, 则 \(\int_{E\cup F} \phi = \int_E \phi + \int_F \phi\).
+\end{ppt}
+\begin{ppt}
+    {Lebesgue 积分具有单调性}
+    设 \(\phi,\psi\) 是简单函数, \(\phi\leq\psi\), 则 \(\int \phi \leq \int \psi\).
+\end{ppt}
+\begin{ppt}
+    {Lebesgue 积分的绝对值不等式}
+    设 \(\phi\) 是简单函数, 则 \(\left|\int \phi(x)\right| \leq \int |\phi(x)|\).
+\end{ppt}
+\begin{dfn}
+    {Lebesgue 上/下积分}
+    设 $E\in\Measurable(\R)$, \(f:E\to\R\) 有界,  Lebesgue 下积分为
+    \[\downarrow \int_{E}f:=\sup\{\int_E\phi, \phi:E\to\R, \phi\leq f\}\]
+    Lebesgue 上积分为
+    \[\uparrow \int_{E}f:=\inf\{\int_E\psi, \psi:E\to\R, \psi\geq f\}\]
+    其中 \(\phi\) 和 \(\psi\) 都是\SimpleFunc{}.
+\end{dfn}
+\begin{dfn}
+    {Lebesgue 积分}
+    设 $E\in\Measurable(\R)$, \(f:E\to\R\) 有界, 如果 \(\downarrow\int_{E}f=\uparrow\int_{E}f\), 则称 \(f\) 在 \(E\) 上 Lebesgue 可积, 其 Lebesgue 积分定义为 \(\int_E f\).
+\end{dfn}
+\begin{thm}
+    {Riemann 可积函数的 Lebesgue 可积性}
+    \(f: I=[a,b]\to\R\) 有界. 若 \(f\) 在 \(I\) 上 Riemann 可积, 则 \(f\) 在 \(I\) 上 Lebesgue 可积, 且两者的积分值相等.
+    \[\int_I f(x)\dd{x}=\int_I f.\]
+\end{thm}
+\begin{prf}
+    Riemann 下积分 \(\leq\) Lebesgue 下积分 \(\leq\) Lebesgue 上积分 \(\leq\) Riemann 上积分. 由于 Riemann 可积, 则 Riemann 下积分 \(=\) Riemann 上积分, 从而得到 \(\int_I f\) 存在且等于 Riemann 积分.
+\end{prf}
+\begin{thm}
+    {可测函数一定可积}
+    设 $E\in\Measurable(\R)$, \(\Leb(E)<\infty\), \(f:E\to\R\) 是一个有界的\MeasurableFunc{}, 则 \(f\) 在 \(E\) 上 Lebesgue 可积.
+\end{thm}
+\begin{prf}
+    \(f\) 可测, 则用\SimpleFunc{}逼近: \(\forall\,N\in\N\), \(\exists\phi_n,\psi_n\), \(\phi_n\leq f\leq \psi_n\), \(0\leq\psi_n-\phi_n\leq\frac{1}{n}\):
+    \[0\leq\int_E(\psi_n-\phi_n)=\int_E(\phi_n-\psi_n)\leq\int_E\frac{1}{n}= \frac{\Leb(E)}{n}.\]
+\end{prf}
+\begin{rmk}
+    稍后我们将看到, 可测函数等价于可积函数.
+\end{rmk}
+\begin{ppt}
+    {可测函数的 Lebesgue 积分具有线性性, 单调性, 绝对值不等式}
+    见上, 这里不再赘述.
+\end{ppt}
+\begin{thm}
+    [UniformConvergence]
+    {一致收敛定理 / 一致收敛保持 Lebesgue 可积性}
+    [Uniform Convergence Theorem]
+    设 $E\in\Measurable(\R)$, \(\Leb(E)<\infty\), \(f_n:E\to\R\) 是有界可测函数列, 且在 \(E\) 上 \(f_n\rightrightarrows f\), 则 \(f\) 可积, 且 
+    \[\int_E f = \lim_{n\to\infty} \int_E f_n\]
+\end{thm}
+\begin{prf}
+    由于 \(f_n\rightrightarrows f\) 和 \(\{f_n\}\) 有界可测, 可以得到 \(f\) 有界可测. 其中可测性只需要几乎处处逐点收敛即可保持, 有界性需要一致收敛保持. 所以 \(f\) 可积.\\
+    如果 \(\Leb(E)=0\), 显然正确;\\
+    如果 \(\Leb(E)>0\), 则 \(\forall\varepsilon>0\), \(\exists N\) 使得 \(\forall n\geq N, |f_n(x)-f(x)|<\frac{\varepsilon}{\Leb(E)}\). 这时
+    \[\implies\vqty{\int_E f-\int_Ef_n}=\vqty{\int_E(f-f_n)}\leq\int_E|f-f_n|\leq\varepsilon\]
+\end{prf}
+\begin{cxmp}
+    {逐点收敛不保持 Lebesgue 积分}
+    设 $E:(0,1)$. 定义函数列 \(f_n:E\to\R\) 如下:
+    \[f_n(x):=\begin{cases}
+        n, & x\in[0,\frac{2}{n}]\\
+        0, & x\in(\frac{2}{n},1]
+    \end{cases}\]
+    则 \(f_n\) 逐点收敛到 \(f(x)=0\), 但是 \(\int_E f_n = 1\) 不收敛到 \(\int_E f=0\). 这说明了逐点收敛不保持 Lebesgue 积分的值.
+\end{cxmp}
+\begin{thm}
+    [BoundedConvergence]
+    {有界收敛定理}
+    [Bounded Convergence Theorem]
+    设 $E\in\Measurable(\R)$, \(\Leb(E)<\infty\), \(f_n:E\to\R\) 是\MeasurableFunc{}列且\textbf{一致有界}, \(f_n\) 几乎处处逐点收敛到 \(f\), 则 \(f\) 可积, 且 
+    \[\int_E f = \lim_{n\to\infty} \int_E f_n\]
+\end{thm}
+\begin{prf}
+    根据\hyperref[thm:Egorov]{Egorov 定理}, \(\forall\varepsilon>0\), 存在闭集 \(F\subseteq E\) 和连续函数 \(g:\R\to\R\) 使得 \(\Leb(E\setminus F)<\varepsilon\), \(f(x)=g(x)\) 在 \(F\) 上恒成立. 这时 \(f_n\rightrightarrows f\) 在 \(F\) 上, 从而 \(\int_F f = \lim_{n\to\infty} \int_F f_n\).\\
+    又因为 \(\{f_n\}\) 一致有界, 则 \(\exists M>0\) 使得 \(\forall n,x, |f_n(x)|\leq M\). 这时
+    \[\vqty{\int_E f-\int_Ef_n}=\vqty{\int_E(f-f_n)}\leq\int_E|f-f_n|=\int_F|f-f_n|+\int_{E\setminus F}|f|+\int_{E\setminus F}|f_n|\]
+    这都是无穷小量.
+\end{prf}
+\begin{dfn}
+    {非负可测函数的 Lebesgue 积分}
+    设 $E\in\Measurable(\R)$, \(f:E\to[0,+\infty]\) 是一个非负\MeasurableFunc{}, 则定义 \(f\) 在 \(E\) 上的 Lebesgue 积分为
+    \[\int_E f := \sup\qty{\int_E h, h:E\to\R, 0\leq h\leq f}\]
+    其中 \(h\) 是有界\MeasurableFunc{}, \(\Leb(\{x\in E, h(x)\neq 0\})<\infty\). 若 \(\int_E f<\infty\), 则称 \(f\) 在 \(E\) 上 Lebesgue 可积.
+\end{dfn}
+\begin{thm}
+    [ChebyshevInequality]
+    {Chebyshev 不等式}
+    [Chebyshev's Inequality]
+    $f:E\to\R$ 非负可测, 则 \(\forall\lambda>0, \Leb(\{x\in E, f(x)>\lambda\})\leq\frac{1}{\lambda} \int_E f\).
+\end{thm}
+\begin{prf}
+    设 \(E_f:=\{x\in E, f(x)>\lambda\}\).\\
+    若 \(\Leb(E_f)<\infty\), 令 \(h=\lambda\Char{E_f}\), \(0\leq h\leq f\). 则 \(\lambda\Leb(E_f)=\int_E h \leq \int_E f\), 从而 \(\Leb(E_f)\leq\frac{1}{\lambda} \int_E f\).\\
+    若 \(\Leb(E_f)=\infty\), 令 \(E_n:=E_f\cap [-n,n]\), \(h_n:=\lambda\Char{E_n}\). 
+    \[\infty=\lambda\Leb(E_f)=\lim_{n\to\infty}\lambda\Leb(E_n)=\lim_{n\to\infty}\int_{E_n}h_n\leq\int_E f.\]
+\end{prf}
+\begin{ppt}
+    {积分为0等价于几乎处处为0}
+    \(f:E\to\bar{\R}\) 是非负可测, 则
+    \[\int_E f=0 \Longleftrightarrow f=0 \cae\]
+\end{ppt}
+\begin{prf}
+    (\(\implies\)) 使用 \hyperref[thm:ChebyshevInequality]{Chebyshev 不等式}, \(\forall n\in\N, \Leb(\{x\in E, f(x)>\frac{1}{n}\})\leq n \int_E f=0\). 这说明 \(\Leb(\{x\in E, f(x)>0\})=0\), 从而 \(f=0\) a.e..\\
+    (\(\impliedby\)) \(f=0 \cae\) 则 \(\int_E f=0\). 考虑 \(0\leq\phi\leq h\leq f\), 其中 \(\phi\) 是\SimpleFunc{}, \(h\) 是有界可测函数. \(f=0\cae\implies h=0\cae\implies\phi=0\cae\implies\int_E\phi=0\implies\int_E h=0\implies\int_Ef=0. \)
+\end{prf}
+\begin{ppt}
+    {非负可测函数的积分具有线性性, 可加性, 单调性}
+\end{ppt}
+\begin{rmk}
+    绝对值不等式是无意义的. 因为已经非负.
+\end{rmk}
+\begin{prf}
+    仅证明线性性. \\
+    "\(\geq\)": \(0\leq h_1\leq f, 0\leq h_2\leq g\), 其中 \(h_1,h_2\) 是有界可测函数. 则 \(0\leq h_1+h_2\leq f+g\), 从而 \(\int_E (f+g)\geq \int_E h_1 + \int_E h_2\). 取上确界即可得到 \(\int_E (f+g)\geq \int_E f + \int_E g\).\\ 
+    "\(\leq\)": \(0\leq \varphi\leq f+g\), 令 \(h_1:=\min\{f,g\}\), 则 \(h_2=\varphi-h_1\), \(0\leq h_2\leq g\) 且 \(0\leq h_1\leq f\). 从而 \(\int_E \varphi = \int_E h_1 + \int_E h_2 \leq \int_E f + \int_E g\). 取下确界即可得到 \(\int_E (f+g)\leq \int_E f + \int_E g\).
+\end{prf}
+\begin{rmk}
+    我们构造 Lebesgue 积分的方式为
+    \begin{center}
+        \(\phi\) \SimpleFunc{} -- \(h\) 有界可测函数 -- \(f\) 非负可测函数.
+    \end{center}
+    如果不这样而直接定义非负可测函数, 证明线性性的时候就会变得非常麻烦, 需要使用单调收敛定理.
+\end{rmk}
+\begin{thm}
+    {Fatou 引理}
+    一列\textbf{非负可测}的函数 \(\{f_n\}\), \(f_n\to f\cae\), 则 
+    \[\int_E f \leq \liminf_{n\to\infty} \int_E f_n\]
+\end{thm}
+\subsection{收敛定理}
+\begin{thm}
+    {绝对收敛定理}
+    设 $E\in\Measurable(\R)$, \(\Leb(E)<\infty\), \(f_n:E\to\R\) 是\MeasurableFunc{}列, 满足 
+    \[\sum_{n=1}^{\infty} \int_{E} |f_k|<+\infty\]
+    且 \(\sum_{n=1}^{\infty} f_n\) 在 \(E\) 上几乎处处收敛, 则 \(\sum_{n=1}^{\infty} f_n\) 在 \(E\) 上 Lebesgue 可积, 且
+    \[\int_E \sum_{n=1}^{\infty} f_n = \sum_{n=1}^{\infty} \int_E f_n\]
+\end{thm}
+\begin{dfn}
+    {一致可积性}
+    设 $E\in\Measurable(\R)$, \(\Leb(E)<\infty\), \(\mathcal{F}\) 是\MeasurableFunc{}族, 则称 \(\{f_n\}\) 在 \(E\) 上\textbf{一致可积}, 当且仅当 
+    \(\forall\varepsilon>0\), \(\exists \delta>0\) 使得 $\forall A\subseteq E, \Leb(A)<\delta, \int_A |f_n|<\varepsilon, \forall f\in\mathcal{F}$.
+\end{dfn}
+\begin{rmk}
+    如果 \(\mathcal{F}\) 是有限的, 且每个函数都可积, 则 \(\mathcal{F}\) 是一致可积的. \\
+    设 $g$ 非负可积, 则函数族
+    \[\mathcal{F}=\{f:E\to\R, |f|\leq g\}\]
+    也是一致可积的. 这正是控制收敛定理的条件.
+\end{rmk}
+\begin{thm}
+    {可测集可以以任意小的测度分割}
+    设 $E\in\Measurable(\R)$, 则 \(\forall\varepsilon>0\) 存在 $E$ 的分割 
+    \[E=\bigcup_{i=1}^n E_i\]
+    使得 \(\forall i, \Leb(E_i)<\varepsilon\).\\
+    在 $\Leb(E)<\infty$ 时, 其逆命题也成立.
+\end{thm}
+\begin{thm}
+    {积分的绝对连续性}
+    设 $E\in\Measurable(\R)$, \(\Leb(E)<\infty\), \(f:E\to\R\) 是一个可积函数, 则 \(\forall\varepsilon>0\), \(\exists\delta>0\) 使得 \(\forall A\subseteq E, \Leb(A)<\delta, \int_A |f|<\varepsilon\).
+\end{thm}
+\begin{prf}
+    不妨设 $f\geq 0$. 由于 $f$ 可积, $\forall\varepsilon>0$ $\exists f_\varepsilon$, 使得 $0\leq f_\varepsilon\leq f$, $f_\varepsilon$ 有界, 且 $\int_E (f-f_\varepsilon)<\frac{\varepsilon}{2}$. \\
+    这时 $\int_A f - \int_A f_\varepsilon \leq \int_E (f-f_\varepsilon) < \frac{\varepsilon}{2}$, 设 $M$ 是 $f_\varepsilon$ 的上界, 则 $\int_A f_\varepsilon \leq M\Leb(A)$. 取 $\delta=\frac{\varepsilon}{2M}$ 即可完成证明. \\
+    其逆命题: 取 $\delta>0$ 使得 $\forall A\subseteq E, \Leb(A)<\delta, \int_A |f|<\varepsilon$. 这时使用上述引理, 将 $E$ 分割为 $\{E_i\}_{i=1}^n$, 使得 $\Leb(E_i)<\delta$. 则 $\int_E |f| = \sum_{i=1}^n \int_{E_i} |f| < n\varepsilon < \infty$. 从而 $f$ 可积.
+\end{prf}
+\begin{thm}
+    [Vitali]
+    {Vitali 收敛定理}
+    设 $E\in\Measurable(\R)$, \(\Leb(E)<\infty\), \(f_n:E\to\R\) 是\MeasurableFunc{}列, \( f_n\rightarrow f\cae\), 且 \(\{f_n\}\) 在 \(E\) 上一致可积, 则 \(f\) 在 \(E\) 上 Lebesgue 可积, 且
+    \[\int_E f = \lim_{n\to\infty}\int_E f_n.\]
+\end{thm}
+\begin{prf}
+    先证明 $f$ 可积. \\
+    取 $\delta>0$, s.t. $\forall A\subseteq E, \Leb(A)<\delta, \int_A |f_n|<\varepsilon, \forall n$. 则仍旧使用刚刚的引理, 将 $E$ 分割为 $\{E_i\}_{i=1}^n$, 使得 $\Leb(E_i)<\delta$. 则 \(\int_E |f| = \sum_{i=1}^n \int_{E_i} |f| = \sum_{i=1}^n \lim_{n\to\infty} \int_{E_i} |f_n| < n\varepsilon < \infty\). 再使用 Fatou 引理, \(\int_E f = \int_E \lim_{n\to\infty} f_n \leq \liminf_{n\to\infty} \int_E f_n < \infty\). 从而 \(f\) 可积.\\
+    再证明 \(\int_E f = \lim_{n\to\infty}\int_E f_n\). \\
+    不失一般性假设 $f_n$ 逐点收敛, 丢弃一个零测集不影响积分. 则 \(\forall\varepsilon>0, \exists\eta>0\), \(\forall A\subseteq E, \Leb(A)<\delta, \int_A |f_n|<\frac{\varepsilon}{3}, \forall n\). \\
+    根据 Fatou 引理, \(\int_A f<\frac{\varepsilon}{3}\). 这时使用 \hyperref[thm:Egorov]{Egorov 定理}, 、\(\exists E_0\subseteq E\), \(\Leb(E\setminus E_0)<\delta\), \(f_n\rightrightarrows f\) 在 \(E_0\) 上. 这时
+    \[\forall\varepsilon>0, \exists N\in\N, \st \forall n>N, x\in E_0, |f-f_n|\leq\frac{\varepsilon}{3\Leb(E_0)}. \]
+    接下来三段控制: 
+    \[\int_E |f-f_n|\leq\int_{E_0}|f-f_n|+\int_{E\setminus E_0}|f|+\int_{E\setminus E_0}|f_n|\leq \varepsilon. \]
+\end{prf}
+\begin{rmk}
+    若 $\Leb(E)=+\infty$, 则一般极限不能交换. 例如
+    \[f_n(x):=\begin{cases}
+        1, & x\in[n,n+1]\\
+        0, & \text{其他}
+    \end{cases}\]
+    则 \(f_n\aelim 0\), \(f_n\) 一致可积, \(\int_{\R} f_n=1\), \(\int_{\R} 0=0\). 这说明了极限不能交换. Egorov 定理不成立导致了失效.
+\end{rmk}
+\begin{rmk}
+    设 $E\in\Measurable(\R)$, \(\Leb(E)<\infty\), \(h_n\) 是\MeasurableFunc{}列, \(h_n\to 0\cae\), 则 \(\lim_{n\to\infty}\int_E h_n=0\) iff \(\{h_n\}\) 在 \(E\) 上一致可积.
+\end{rmk}
+\begin{thm}
+    {}
+    \(E:\Measurable(\R)\), \(\forall\varepsilon>0\), \(\exists E_0\subseteq E\), \(\Leb(E_0)<\infty\), \(\int_{E\subseteq E_0} |f|<\varepsilon\)
+\end{thm}
+\begin{rmk}
+    这个定理说明了即使集合本身测度无限, 但可积函数的积分几乎全部集中在了有限测度的子集上. 这也是我们定义测度紧致性的动机.
+\end{rmk}
+\begin{dfn}
+    {测度紧致性}
+    设 $E\in\Measurable(\R)$, 称函数族 \(\mathcal{F}\) 是测度紧致的, 当且仅当 \(\forall\varepsilon>0\), \(\exists E_0\subseteq E\), \(\Leb(E_0)<\infty\), \(\int_{E\setminus E_0} |f|<\varepsilon, \forall f\in\mathcal{F}\).
+\end{dfn}
+\begin{thm}
+    [VitaliGeneral]
+    {一般的 Vitali 收敛定理}
+    设函数列 \(f_n\) 是一致可积且测度紧致的, \(f_n\aelim f\) 则 \(f\) 可积, 且 \(\int_E f = \lim_{n\to\infty}\int_E f_n\).
+\end{thm}
+\begin{crl}
+    几乎处处收敛到 0 的函数列的极限与积分可交换当且仅当该函数列一致可积且测度紧.
+\end{crl}
+\begin{dfn}
+    [ConvergenceInMeasure]
+    {依测度收敛}
+    设 $E\in\Measurable(\R)$, \(f_n:E\to\R\) 是\MeasurableFunc{}列, 则称 \(f_n\) 依测度收敛到 \(f\), 当且仅当 
+    \[\forall\varepsilon>0, \lim_{n\to\infty} \Leb(\{x\in E, |f_n(x)-f(x)|>\varepsilon\})=0.\]
+    记作 \(f_n\mlim f\).
+\end{dfn}
+\begin{rmk}
+    在概率论中被称为\textbf{依概率收敛}. 表明发生此事件的概率会趋于0, 但不保证事件不发生. 
+\end{rmk}
+\begin{ppt}
+    {依测度收敛的极限是唯一的}
+\end{ppt}
+\begin{prf}
+    根据 
+    \[|f-g|\leq |f-f_n|+|f_n-g|\]
+    把无定义的点丢弃掉, 
+    \(\exists\,F:=E_0\subset E\), \(\Leb(E_0)=0\), \(\forall\eta>0\):
+    \[\{x\in F, |f-f_n|<\frac{\eta}{2}  \}\cup\{x\in F, |f_n-g|<\frac{\eta}{2} \}\supseteq \{x\in F, |f-g|<\eta \} \]
+\end{prf}
+\begin{ppt}
+    {一致收敛蕴含依测度收敛}
+    设 $E\in\Measurable(\R)$, \(\Leb(E)<\infty\), \(f_n:E\to\R\) 是\MeasurableFunc{}列, \(f_n\rightrightarrows f\), 则 \(f_n\) 依测度收敛到 \(f\).
+\end{ppt}
+\begin{ppt}
+    {有限测度集合上几乎处处收敛蕴含依测度收敛}
+\end{ppt}
+\begin{cxmp}
+    {无限测度集合上几乎处处收敛不蕴含依测度收敛}
+    设 $E=\R$, 定义函数列 \(f_n:E\to\R\) 如下:
+    \[f_n(x):=\begin{cases}
+        1, & x\in[-n,n]\\
+        0, & \text{其他}
+    \end{cases}\]
+    则 \(f_n\to 1\) a.e., 但 \(\Leb(\{x\in E, |f_n(x)-1|>\frac{1}{2}\})=2n\) 不趋于0. 这说明了在无限测度集合上几乎处处收敛不蕴含依测度收敛.
+\end{cxmp}
+\begin{cxmp}
+    {依测度收敛不蕴含几乎处处收敛}
+    设 $E=(0,1)$, 定义函数列 \(f_n:E\to\R\) 如下:
+    \[f_n(x):=\begin{cases}
+        1, & x\in[0,\frac{1}{n}]\\
+        0, & \text{其他}
+    \end{cases}\]
+    则 \(f_n\) 依测度收敛到 \(f(x)=0\), 但 \(f_n\) 不逐点收敛到 \(f\). 这说明了依测度收敛不蕴含几乎处处收敛.
+\end{cxmp}
+\begin{thm}
+    [FRiesz]
+    {F.Riesz 定理}
+    $f_n\mlim f$ \(\implies f_{n_k}\subseteq f_n, f_{n_k}\aelim f\).
+\end{thm}
+\begin{prf}
+    设 \(E_k:=\{x\in E, |f_n(x)-f(x)|>\frac{1}{k}\}\). 则 \(\lim_{n\to\infty} \Leb(E_k)=0\). 这时 \(\exists n_k\) 使得 \(\Leb(E_k)<2^{-k}\). 则 \(\sum_{k=1}^\infty \Leb(E_k)<\infty\). 
+    根据\hyperref[thm:BorelCantelli]{Borel-Cantelli 引理}, \(\Leb(\{x\in E, x\in E_k \text{ for infinitely many } k\})=0\). 从而 \(f_{n_k}\aelim f\).
+\end{prf}
+\begin{thm}
+    {}
+    设 \(\{f_n\}\) 非负可测, 则
+    \[\lim_{n\to\infty}\int_E f_n=0\]
+    iff \(f_n\mlim 0\), 且 \(f_n\) 在 \(E\) 上一致可积和测度紧.
+\end{thm}
+\begin{prf}
+    "($\implies$)": 
+    \[\lim_{n\to\infty}\int_F f_n=0\implies\forall\varepsilon>0,\exists\,N\in\N,\forall n>N,0\leq\int_E f_n<\varepsilon \]
+    所以 \(\forall\,A\subseteq E, \int_A f_n<\varepsilon\). 从而 \(f_n\) 在 \(E\) 上一致可积. \\
+    又因为 \(\int_E f_n<\varepsilon\), 则 \(\int_{E\setminus E_0} f_n<\varepsilon\) 其中 \(E_0\subseteq E\) 是一个有限测度的集合. 从而 \(f_n\) 在 \(E\) 上测度紧.\\
+    由 \hyperref[thm:ChebyshevInequality]{Chebyshev 不等式}, \(\forall\eta>0\):
+    \[\lim_{n\to\infty}\Leb(\{x\in E, f_n(x)>\eta\})\leq\lim_{n\to\infty}\frac{1}{\eta}\int_E f_n=0.\]
+    从而 \(f_n\mlim 0\).\\
+    "($\impliedby$)": 反证: 设 $\lim_{n\to\infty}\int_E f_n\neq 0$. 则 \(\exists\eta>0\) 和 \(\{f_{n_k}\}\), 使得 \(\int_E f_{n_k}>\eta\). 注意到 \(f_{n_k}\mlim f\), 由 \hyperref[thm:FRiesz]{F.Riesz 定理}, \(\exists\{f_{n_{k_j}}\}\subseteq\{f_{n_k}\}\), 使得 \(f_{n_{k_j}}\aelim 0\). 该序列也是一致可积和测度紧的. 这时根据 \hyperref[thm:Vitali]{Vitali 收敛定理}, \(\int_E f_{n_{k_j}}\to 0\). 矛盾.
+\end{prf}
+\begin{rmk}
+    几种收敛方式的对比如下: 
+    \paragraph{几乎一致收敛.} 称可积函数列 \(f_n\) \underline{几乎一致收敛}到 \(f\), 当且仅当
+    \[\forall\epsilon>0, \exists\,E\subseteq X,\Leb(E)<\epsilon, f_n\rightrightarrows f \text{ 在 } X\setminus E \text{ 上成立.}\]
+    需要注意的是, 这里的集合 \(E\) 的测度是无限小, 但不为 0.
+    \paragraph{几乎处处收敛.} 称可积函数列 \(f_n\) \underline{几乎处处收敛}到 \(f\), 当且仅当
+    \[\exists\,E\subseteq X, \Leb(E)=0, \st f_n\to f \text{ 在 } X\setminus E \text{ 上成立.}\]
+    需要注意的是, 几乎处处收敛是逐点的, 不是一致的.
+    \paragraph{范数收敛 / L1 收敛.} 称可积函数列 \(f_n\) \underline{范数收敛}到 \(f\), 当且仅当
+    \[\int_X |f_n-f|\to 0.\]
+    \paragraph{依测度收敛.} 称可积函数列 \(f_n\) \underline{依测度收敛}到 \(f\), 当且仅当
+    \[\forall\varepsilon>0, \Leb(\{x\in X, |f_n(x)-f(x)|>\varepsilon\})\to 0.\]
+    \paragraph{弱收敛.} 称可积函数列 \(f_n\) \underline{弱收敛}到 \(f\), 当且仅当
+    \[\forall g\in L^\infty(X), \int_X f_n g\to \int_X fg.\]
+    \(g\in L^\infty(X)\) 指的是 \(g\) 是一个几乎处处有界的可测函数. 这时 \(f_n\) 的积分与 \(g\) 的积分趋于 \(f\) 与 \(g\) 的积分. \\
+    我们将选取经典反例来区分它们:
+    \begin{center}
+        \footnotesize
+        \begin{tabular}{c|cccccc}
+            是否收敛到\(0\)? & \makecell{(0) 有限测度上的\\简单函数升列} & (1) \(f_n=\chi_{[n,n+1]}\) & (2) \(f_n=n\chi_{[0,\frac{1}{n}]}\) & (3) \(f_n=\frac{\chi_{[0,n]}}{n}\) & (4) Typewriter 序列 & (5) \makecell{\([0,2\pi]\) 上的 \\ \(f_n=1+\sin(nx)\)} \\
+            \hline
+            几乎一致收敛 & \checkmark & \checkmark & \checkmark & \checkmark & \texttimes & \texttimes \\
+            几乎处处收敛 & \checkmark & \texttimes & \texttimes & \checkmark & \texttimes & \texttimes \\
+            L1 收敛 & \checkmark & \texttimes, 恒为 1 & \texttimes, 恒为 1 & \texttimes, 恒为 1 & \checkmark & \texttimes \\
+            依测度收敛 & \checkmark & \texttimes & \checkmark & \checkmark & \checkmark & \texttimes \\
+            弱收敛 & \checkmark & \checkmark & \texttimes & \texttimes & \checkmark & \checkmark \\    
+        \end{tabular}
+    \end{center}
+\end{rmk}
+\subsection{可积与可测的关系}
+\begin{thm}
+    {夹逼定理}
+    设 \({\phi_n}\) 是可测升列, \(\{\psi_n\}\) 是可测降列, \(\phi_n\leq f\leq\psi_n\), \(\lim_{n\to\infty}\int_E (\phi_n-\psi_n)=0\). 则
+    \begin{enumerate}
+        \item \(f\) 可积;
+        \item \(\phi_n\aelim f\), \(\psi_n\aelim f\);
+        \item \(\displaystyle\int_E f = \lim_{n\to\infty} \int_E \phi_n = \lim_{n\to\infty} \int_E \psi_n\).
+    \end{enumerate}
+\end{thm}
+\begin{prf}
+    取 \(\phi_*:=\lim_{n\to\infty}\phi_n\), \(\psi_*:=\lim_{n\to\infty}\psi_n\). 
+    \[\phi_n\leq\phi_*\leq f\leq\psi_*\leq\psi_n\]
+    由于可测函数列的极限也是\MeasurableFunc{}, \(\psi_*-\phi_*\) 非负可测. 又因为 \(\int_E (\psi_*-\phi_*)=\lim_{n\to\infty}\int_E (\psi_n-\phi_n)=0\), 则 \(\psi_*= \phi_*\cae\). \\
+    从而 \(f=\phi_*=\psi_*\cae\). 这说明 \(f\) 可测, 且 \(\phi_n\aelim f\), \(\psi_n\aelim f\). \\
+    最后
+    \[0\leq\int_E f-\int_E \phi_n=\int_E (f-\phi_n)\leq\int_E(\psi_n-\phi_n)\to 0\]
+    取极限, \(\int_E f = \lim_{n\to\infty} \int_E \phi_n\). 同样的, \(\int_E f = \lim_{n\to\infty} \int_E \psi_n\).
+\end{prf}
+\begin{thm}
+    {可积等价于可测}
+    设 $E\in\Measurable(\R)$, \(\Leb(E)<\infty\), \(f:E\to\R\), \(f\) 有界, 则可积 iff \(f\) 可测.
+\end{thm}
+\begin{prf}
+    "($\impliedby$)": 已经证明了可测函数一定可积.\\
+    "($\implies$)": 由定义, \(\exists\phi_n, \psi_n\) 是\SimpleFunc{}列, s.t. \(\phi_n\leq f\leq\psi_n\), \(\int_E (\psi_n-\phi_n)\to 0\). 取 \(\phi'_n:=\max_{1\leq i\leq n}\phi_n\), \(\psi'_n:=\min_{1\leq i\leq n}\psi_n\). 则 \(\phi'_n\) 是可测升列, \(\psi'_n\) 是可测降列, \(\phi'_n\leq f\leq\psi'_n\), \(\int_E (\psi'_n-\phi'_n)\to 0\). 从而 \(f\) 可测.
+\end{prf}
+\subsection{Lebesgue 积分与 Riemann 积分的关系}
+\begin{dfn}
+    [Oscillation]
+    {振幅}
+    设 $f:[a,b]\to\R$ 是一个函数, 则定义 \(f\) 在 $x$ 的振幅为
+    \[\omega_f(x):=\lim_{\delta\to 0}\sup_{z_1,z_2\in(x-\delta,x+\delta)} |f(z_1)-f(z_2)|\]
+\end{dfn}
+\begin{rmk}
+    (1) \(f\) 在 \(x\) 处连续等价于 \(\omega_f(x)=0\).\\
+    (2) \(\omega_f\) 本身是一个非负可测函数. \\
+    (3) \(f\) 的连续点集是一个 G-delta 集. 这是因为其可以表示为
+    \[\bigcap_{n=1}^{\infty} \{x\in[a,b]: \omega_f(x)<\frac{1}{n}\}\]
+    (4) 一个集合是某个导函数的不连续点, 当且仅当它是第一纲集.\\
+    (5) 处处连续且至少有一点可微的函数构成连续函数的第一纲集.
+\end{rmk}
+\begin{ins}
+    {Dirichlet 函数}
+    定义 \(f:[0,1]\to\R\) 如下:
+    \[f(x):=\begin{cases}
+        1, & x\in\Q\cap[0,1]\\
+        0, & x\in([0,1]\setminus\Q)
+    \end{cases}\]
+\end{ins}
+\begin{ins}
+    {Riemann 函数}
+    定义 \(f:(0,1)\to\R\) 如下:
+    \[f(x):=\begin{cases}
+        \frac{1}{q}, & x=\frac{p}{q}\in\Q\cap(0,1), \gcd(p,q)=1\\
+        0, & x\in((0,1)\setminus\Q)
+    \end{cases}\]
+    则其连续点集是 \((0,1)\setminus\Q\).
+\end{ins}
+\begin{cxmp}
+    {不存在连续点集是 \(\Q\) 的函数}
+    反证: 假设 \(\Q\) 是 G-delta 集. 由于
+    \[\Q=\{a_n\}_{n=1}^\infty\]
+    令
+    \[U_n=(0,1)\setminus {a_n}\]
+    则
+    \[\bigcap_{n=1}^\infty U_n = (0,1)\setminus\Q\]
+    注意到 \(\varnothing=\Q\cap (0,1)\setminus\Q\): 若 \(\Q\) 是 G-delta :
+    \[\qty(\cap_{n=1}^{\infty}U_n)\cap\qty(\bigcap_{m=1}^{\infty}V_n)=\varnothing\]
+    但是 \(U_n, V_m\) 都在 \((0,1)\) 中稠密, 根据 Baire 纲定理, 稠密的开集的交也是稠密的, 故不可能是空集. 矛盾.
+\end{cxmp}
+\begin{thm}
+    {振幅函数积分与 Riemann 积分的关系}
+    \(f\) 在有界区间 \(I=[a,b]\) 上有界, 则
+    \[\int_a^b f(x)\dd{x}=\int_I \omega_f\]
+\end{thm}
+\begin{thm}
+    {Lebesgue 定理}
+    \(f\) 在有界区间 \(I=[a,b]\) 上有界, 则 \(f\) Riemann 可积 iff \(f\) 的不连续点是一个零测集. 这时 \(\int_a^b f(x)\dd{x}=\int_I f\).
+\end{thm}
+\begin{prf}
+    Riemann 可积说明
+    \[\int_I \omega_f = 0\]
+    从而 \(\omega_f=0\cae\). 这说明 \(f\) 的不连续点是一个零测集.
+\end{prf}
+\section{Lebesgue 微分}
+\subsection{单调函数的微分}
+\begin{dfn}
+    {单调函数}
+    设 $I\subseteq\R$ 是一个区间, 则称 \(f:I\to\R\) 是单调的, 当且仅当 \(\forall x,y\in I, x<y, f(x)\leq f(y)\) 或 \(\forall x,y\in I, x<y, f(x)\geq f(y)\). 分别称之为单调递增和单调递减.
+\end{dfn}
+\begin{ppt}
+    {单调函数的连续性1}
+    设 $I\subseteq\R$ 是一个区间, \(f:I\to\R\) 是单调的, 则 \(f\) 在 \(I\) 上至多有可数个不连续点.
+\end{ppt}
+\begin{prf}
+    考虑
+    \[\lim_{x\to x_0^+}f(x_0)\leq\lim_{x\to x_0^-}f(x_0)\]
+    \(f\) 在 \(x_0\) 处不连续说明 \(\lim_{x\to x_0^+}f(x_0)<\lim_{x\to x_0^-}f(x_0)\). 这时 \(\exists r\in\Q\) 使得 \(\lim_{x\to x_0^+}f(x_0)<r<\lim_{x\to x_0^-}f(x_0)\). 从而每个不连续点都对应一个有理数. 由于 \(\Q\) 可数, 则 \(f\) 在 \(I\) 上至多有可数个不连续点.
+\end{prf}
+\begin{ppt}
+    {单调函数的连续性2}
+    设 \(A\subseteq (a,b)\) 是可数集, 则 \(\exists\) 单调函数 \(f:(a,b)\to\R\), 使得 \(A\) 是 \(f\) 的不连续点集.
+\end{ppt}
+\begin{prf}
+    设 \(A=\{r_n\}_{n=1}^\infty\). 定义 \(f:(a,b)\to\R\) 如下:
+    \[f(x):=\sum_{n=1}^\infty \frac{1}{2^n}\Char{(r_n,b)}(x)\]
+    则 \(f\) 是良定的且是单调递增的, 且 \(f\) 在 \(r_n\) 处不连续: 设 \(x=r_k\):
+    \[\lim_{x\to r_k^-}f(x)=\sum_{n=1}^{k-1}\frac{1}{2^n}, \lim_{x\to r_k^+}f(x)=\sum_{n=1}^{k}\frac{1}{2^n}\]
+    在 \(A\) 外是连续的, 因为总能找到 \(x_0\in (a,b)\setminus A\) 的邻域中不包含任何 \(r_n\). 从而 \(A\) 是 \(f\) 的不连续点集.
+\end{prf}
+\begin{ppt}
+    {单调函数的可测性}
+    设 \(I\subseteq\R\) 是一个区间, \(f:I\to\R\) 是单调的, 则 \(f\) 是可测函数.\\
+    这是显然: 因为 \(\{x\in I, f(x)>r\}\) 必定是一个区间或者空集, 从而是可测的.
+\end{ppt}
+\begin{dfn}
+    [VitaliCover]
+    {Vitali 覆盖}
+    设 \(E\subseteq\R\). \(\mathcal{I}\) 是一族非退化的有界闭区间. 称 \(\mathcal{I}\) 是 \(E\) 的 Vitali 覆盖, 当且仅当 \(\forall x\in E,\forall\varepsilon>0, \exists I\in\mathcal{I}, x\in I, \ell(I)<\varepsilon\).
+\end{dfn}
+\begin{thm}
+    {Vitali 覆盖定理}
+    设 \(E\subseteq\R\), \(\Lebout(E)<\infty\), 则 \(\forall\varepsilon>0\), \(\exists\) 互不相交的 \(I_1,\cdots,I_n\in\Vitali{E}\), 使得 \(\Lebout(E\setminus\bigcup_{i=1}^n I_i)<\varepsilon\).
+\end{thm}
+\begin{prf}
+    由于外测度有限, \(\exists\,U\), \(U\) 是开集, \(E\subseteq U\), \(\Leb(U)<\Lebout(E)+\varepsilon\). 不妨假设 \(I_n\subseteq U\). \\
+    任意 \(n\geq 1\), 选取两两不交的 \(\{I_k\}_{k=1}^n\), 这时: 若这有限个 \(I_k\) 已经覆盖了 \(U\), 证明结束;\\
+    否则 \(E\setminus\bigcup_{i=1}^n I_i\neq\varnothing\). 令 \(\mathcal{F}:={I\in\Vitali{E},I\cap(\bigcup_{i=1}^n I_i)=\varnothing}\). 则
+    \[E\setminus\bigcup_{i=1}^n I_i\subseteq\bigcup_{I\in\mathcal{F}} I\]
+    \textsf{这其实不是显然的. 当使用的覆盖是开覆盖时就不能保证. 但在这里由于 \(\bigcup_{i=1}^n I_i\) 是闭的, 从而 \(\mathcal{F}\) 中的闭集可以覆盖到端点.} \\
+    设 \(s_n=\sup_{I\in\mathcal{F}}\ell(I)\). 取 \(I_{n+1}\in\mathcal{F}\), 使得 \(\ell(I_{n+1})>\frac{s_n}{2}\). 则 \(\ell(I_{n+1})>\frac{1}{2}\ell(I)\) 对任意 \(I\in\mathcal{F}\) 都成立. 从而 \(I_{n+1}\) 与 \(\{I_k\}_{k=1}^n\) 中的某个区间相交. \\
+    这时 \(I_{n+1}\) 与该区间的并集是一个长度不超过 \(2\ell(I_{n+1})\) 的区间, 且包含了该区间和 \(I_{n+1}\). 从而可以把该区间替换为这个新的区间, 使得新的区间与 \(\{I_k\}_{k=1}^n\) 中的任何一个区间都不相交. 从而完成了归纳. \\
+    考虑证明
+    \[E\setminus\bigcup_{i=1}^n I_i\subseteq\bigcup_{i=n+1}^\infty 5I_i\]
+    设 \(x\in E\setminus\bigcup_{i=1}^n I_i\). 取 \(J\in\mathcal{F}\), 使得 \(x\in I\). \\
+    令 \(N\in\N\) 为最小的使得 \(J\cap I_N\neq\varnothing\) 成立的数. (若该集合不存在, 则 \(J\) 与任意 \(I_N\) 不交. 但是 \(\ell(I_{N+1})\geq\frac{\ell(J)}{2}\) 且 \(\ell(I_k\to 0)\) 均成立. 从而 \(\ell(J)=0\), 矛盾. )\\
+    接下来要证明 \(5I_N\) 可以覆盖 \(J\). (画图即可, 因为 \(\ell(N)\geq\frac{\ell(J)}{2}\), 所以最差的情况是二者只有端点相交, 则 \(5\) 倍恰好可以覆盖到 \(J\) 另一头的端点. 5 是最小的常数, 使得 \(5I_N\) 可以覆盖 \(J\).)\\
+    最后, 取 \(N\) 足够大, 使得 \(\ell(I_N)<\frac{\varepsilon}{5}\). 则
+    \[\Lebout(E\setminus\bigcup_{i=1}^n I_i)\leq\sum_{i=n+1}^\infty \Leb(5I_i)=5\sum_{i=n+1}^\infty \ell(I_i)\leq 5\sum_{i=n+1}^\infty \ell(I_N)<\varepsilon.\]
+\end{prf}
+\begin{dfn}
+    {上/下导数}
+    设 \(x \in \operatorname{int} E\), \(f: E \to \R\) 是一个函数. 定义 \(f\) 在 \(x\) 处的上导数和下导数分别为:
+    \[
+    \overline{D}f(x) = \limsup_{h \to 0} \frac{f(x+h) - f(x)}{h}, \quad \underline{D}f(x) = \liminf_{h \to 0} \frac{f(x+h) - f(x)}{h}.
+    \]
+\end{dfn}
+\begin{ppt}
+    {上下导数的性质}
+    设 \(x \in \operatorname{int} E\), \(f: E \to \R\) 是一个函数, 则
+    \begin{enumerate}
+        \item \(f\) 在 \(x\) 处可导当且仅当 \(\overline{D}f(x) = \underline{D}f(x)\). 这时 \(f'(x) = \overline{D}f(x) = \underline{D}f(x)\).
+        \item 若 \(f\) 在 \(x\) 处单调递增, 则 \(\underline{D}f(x) \geq 0\).
+        \item 若 \(f\) 在 \(x\) 处单调递减, 则 \(\overline{D}f(x) \leq 0\).
+    \end{enumerate}
+\end{ppt}
+\begin{thm}
+    {单调函数的可导性引理}
+    设 \(f:(a,b)\to\R\) 是单调函数, 
+    \[\forall\eta>0, \Lebout(\{x \in (a,b) : \overline{D}f(x) > \eta\}) < \frac{1}{\eta} (f(b)-f(a)) \]
+\end{thm}
+\begin{prf}
+    设 \(E_\eta := \{x \in (a,b) : \overline{D}f(x) > \eta\}\). 设 \(0<\alpha<\eta\), 则定义
+    \[\mathcal{F} := \{[x, y]\subseteq(a,b), \frac{f(y) - f(x)}{y - x} \geq \alpha\}\]
+    则 \(\mathcal{F}\) 是 \(E_\eta\) 的 Vitali 覆盖 (由于 \(\alpha<\eta\), 所以 \(\mathcal{F}\) 不为空集). 根据 Vitali 覆盖定理, \(\exists\) 互不相交的 \(\{[x_i, y_i]\}_{i=1}^n \subseteq \mathcal{F}\), 使得 \(\Lebout(E_\eta \setminus \bigcup_{i=1}^n [x_i, y_i]) < \varepsilon\). 则
+\end{prf}
+\begin{thm}
+    {单调函数的可导性}
+    设 \(f:(a,b)\to\R\) 是单调函数, 则 \(f\) 在 \((a,b)\) 上几乎处处可导.
+\end{thm}
+\begin{dfn}
+    {差商}
+    设 \(f:(a,b)\to\R\) 是一个函数, 则定义 \(f\) 在 \(x\) 处的差商为
+    \[
+    \Delta_h f(x) := \frac{f(x+h) - f(x)}{h}.
+    \]
+\end{dfn}
+\begin{dfn}
+    {均值}
+    设 \(f:(a,b)\to\R\) 是一个可积函数, 则定义 \(f\) 在 \(x\) 处的均值为
+    \[
+    A_h f(x) := \frac{1}{h} \int_x^{x+h} f.
+    \]
+\end{dfn}
+\begin{ppt}
+    {差商与均值的关系}
+    设 \(f:(a_0,b_0)\to\R\), \((a,b)\subseteq (a_0,b_0)\). 则 
+    \[\int_a^b \Delta_h f(x) =  A_h f(b) - A_h f(a) \]
+\end{ppt}
+\begin{thm}
+    {微积分基本定理1}
+    设 \(f:(a,b)\to\R\) 是单调函数, 则 \(f'\) 几乎处处可积, 且 \(\int_a^b f' \leq f(b)-f(a)\).
+\end{thm}
+\begin{prf}
+    提示: 设一族差商函数 \(\{\Delta_{h_n} f\}\), \(h_n \to 0\). 则其是非负可测. 根据 Fatou 引理和差商的定义即可.
+\end{prf}
+\begin{thm}
+    {收敛的函数项级数可以逐项积分}
+    \(f_n\) 是 \((a,b)\) 上的单调递增可积函数, 且 \(\sum_{n=1}^{\infty}f_n<\infty\). 则 \(\sum_{n=1}^{\infty}f_n'\) 收敛, 且 \(\int_a^b \sum_{n=1}^{\infty}f_n' = \sum_{n=1}^{\infty}\int_a^b f_n'\).
+\end{thm}
+\begin{dfn}
+    {有界变差函数}
+    设 \(f:(a,b)\to\R\) 是一个函数, 则定义 \(f\) 的变差为
+    \[V_a^b(f) := \sup_{P} \sum_{i=1}^n |f(x_i) - f(x_{i-1})|\]
+    其中 \(P = \{a = x_0 < x_1 < \cdots < x_n = b\}\) 是 \((a,b)\) 上的一个分割. 当 \(V_a^b(f) < \infty\) 时, 称 \(f\) 是一个有界变差函数.
+\end{dfn}
+\begin{thm}
+    {有界变差函数的可导性}
+    设 \(f:(a,b)\to\R\) 是一个有界变差函数, 则 \(f\) 在 \((a,b)\) 上几乎处处可导. 且满足
+    \[\int_{a}^b |f'(x)| dx \leq V_a^b(f)\]
+\end{thm}
+\begin{dfn}
+    {绝对连续性}
+    设 \(f:(a,b)\to\R\) 是一个函数, 则称 \(f\) 是绝对连续的, 当且仅当 \(\forall\varepsilon>0, \exists\delta>0\), 使得 \(\forall\{(x_i,y_i)\}_{i=1}^n\), \(a<x_1<y_1<\cdots<x_n<y_n<b\), 且 \(\sum_{i=1}^n (y_i-x_i)<\delta\) 时, \(\sum_{i=1}^n |f(y_i)-f(x_i)|<\varepsilon\).
+\end{dfn}
+\begin{cxmp}
+    {绝对连续不蕴含 Lipschitz 连续}
+    函数 \(f(x)=\sqrt{x}\) 是绝对连续的但不是 Lipschitz 连续的.
+\end{cxmp}
+\continued
+\subsection{Lp 空间}
+\begin{dfn}*
+    {快速 Cauchy 序列}
+    序列 \(\{x_n\}_{n=1}^\infty\) 被称为快速 Cauchy 的, 当且仅当它的相邻两项差的序列是可和的.
+\end{dfn}
+\begin{thm}
+    {Cauchy 序列有快速 Cauchy 子列}
+    设 \(\{x_n\}\) 是一个 Cauchy 序列, 则 \(\{x_n\}\) 存在一个快速 Cauchy 子列.
+\end{thm}
+\begin{thm}
+    {Lp 空间中的快速 Cauchy 序列的收敛性}
+    如果 \(\{f_n\}\) 是 \(L^p(E)\) 中的一个快速 Cauchy 序列, 则 \(\{f_n\}\) 1. 几乎处处收敛 2. 依 Lp 范数收敛 于 \(L^p(E)\) 中的某个元素.
+\end{thm}
+\begin{thm}
+    {Riesz-Fischer 定理}
+    \(L^p(E)\) 是一个 Banach 空间.
+\end{thm}
+\begin{crl}
+    {Lp 范数收敛蕴含依测度收敛}
+    使用 Chebyshev 不等式即可.
+\end{crl}
+\begin{cxmp}
+    {Lp 范数收敛不蕴含几乎处处收敛}
+    反例如 Typewriter 序列: 它几乎处处不收敛, 但依 L1 范数收敛于 0.
+\end{cxmp}
+\begin{cxmp}
+    {几乎处处收敛不蕴含 Lp 范数收敛}
+    反例如 \(f_n = n\chi_{[0, \frac{1}{n}]}\): 它几乎处处收敛于 0, 但依 L1 范数不收敛于 0.
+\end{cxmp}
+\begin{thm}
+    {Lp 范数收敛于几乎处处收敛的关系}
+    设有一列几乎处处收敛的函数列 \(\{f_n\}\subset L^p(E)\). 则 \(\{f_n\}\) 依 Lp 范数收敛于 \(f\) 当且仅当 \(\{\norm{f_n}\}\) 作为实数序列收敛到 \(\norm{f}\).
+\end{thm}
+\begin{crl}
+    {Lp 范数收敛的 Vitali 定理}
+    设有一列几乎处处收敛的函数列 \(\{f_n\}\subset L^p(E)\). 则 \(\{f_n\}\) 依 Lp 范数收敛于 \(f\) 当且仅当 \(f_n^p\) 作为函数列是一致可积且紧.
+\end{crl}
+\begin{thm}
+    {简单函数在 Lp 空间中稠密}
+    设 \(1\leq p\leq\infty\). 则\SimpleFunc{}在 \(L^p(E)\) 中稠密. 
+\end{thm}
+\begin{crl}
+    {阶梯函数在 Lp 空间中稠密}
+    设 \(1\leq p\leq\infty\). 则阶梯函数在 \(L^p(E)\) 中稠密.\\
+    所谓阶梯函数指的是
+    \[f(x)=\sum_{i=1}^n a_i \Char{[x_{i-1}, x_i)}(x)\]
+    其中 \(a_i\in\R\), \(a_1\leq a_2\leq\cdots\leq a_n\), \(a_0=0\), \(x_0<x_1<\cdots<x_n\).
+\end{crl}
+\begin{crl}
+    {具有紧支撑的连续函数在 Lp 空间中稠密}
+    设 \(1\leq p\leq\infty\). 则具有紧支撑的连续函数在 \(L^p(E)\) 中稠密.
+\end{crl}
