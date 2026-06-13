@@ -115,6 +115,13 @@
     因此, \(y\) 不在序列 \(x_1, x_2, x_3, \ldots\) 中, 这与假设 \([0,1]\) 可数矛盾.\\
     综上所述, \([0,1]\) 不可数.
 \end{prf}
+\begin{thm}
+    {任意实数集合都有可数的子覆盖}
+    设 \(X\subseteq\R\), 则存在一列开集 \(\{U_i\}_{i=1}^\infty\) 使得 \[X \subseteq \bigcup_{i=1}^\infty U_i\].
+\end{thm}
+\begin{rmk}
+    这是因为 \(\R\) 是具有第二可数性质的拓扑空间: \(\R\) 具有可数的拓扑基.
+\end{rmk}
 \subsection{Lebesgue 测度}
 \begin{dfn}
     [lebesgue-outer-measure]
@@ -433,11 +440,18 @@
     [Almost Everywhere]
     设 \(P\) 是一个命题, 如果存在一个零测集 \(Z\) 使得 \(P\) 在 \(R\setminus Z\) 上成立, 则称 \(P\) 在 \(R\) 上\textbf{几乎处处成立}. 一般我们要求 \(R\) 是可测的.
 \end{dfn}
+\begin{xmp}
+    [ae-convergence]
+    {几乎处处收敛}
+    [Almost Everywhere Convergence]
+    称函数列 \(\{f_n\}_{n=1}^\infty\) 在 \(E\) 上几乎处处收敛, 如果存在一个零测集 \(Z\subseteq E\) 使得 \(\{f_n\}_{n=1}^\infty\) 在 \(E\setminus Z\) 上逐点收敛.\\
+    这样的收敛方式记作 \(f_n\aelim f\).
+\end{xmp}
 \begin{thm}
     [borel-cantelli]
     {Borel-Cantelli 引理}
     [Borel-Cantelli Lemma]
-    设 \(\{E_n\}_{n=1}^\infty\) 是一列\MeasurableSet{}, 满足测度和有限 \(\sum_{n=1}^\infty \Leb(E_n)<+\infty\), 则对几乎处处的 \(x\in\R\), \(x\) 仅属于至多有限个 \(E_n\).
+    设 \(\{E_n\}_{n=1}^\infty\) 是一列\MeasurableSet{}, 满足测度和有限 \(\sum_{n=1}^\infty \Leb(E_n)<+\infty\), 则对\AlmostEverywhere{}的 \(x\in\R\), \(x\) 仅属于至多有限个 \(E_n\).
 \end{thm}
 \begin{prf}
     令 \(G_k:=\bigcup_{k=1}^{\infty}E_k\) 则 \(\{G_k\}_{k=1}^\infty\) 是一个可测降列且 \(\Leb(G_k)\leq \sum_{i=k}^\infty \Leb(E_i)\). 因此, 
@@ -543,7 +557,7 @@
     Borel \(\sigma\)-代数中的集合的\hyperref[dfn:lebesgue-outer-measure]{外测度}称为 \textbf{Borel 测度}.
 \end{dfn}
 \begin{ppt}
-    [BorelOfMeasurable]
+    [borel-of-measurable]
     {Borel 集是可测集}
     设 \(B\) 是 \(\R\) 的一个 \hyperref[xmp:borel]{Borel 集}, 则 \(B\) 是\MeasurableSet{}.\\
     特别地, 所有开集和闭集都是\MeasurableSet{}.
@@ -553,6 +567,8 @@
 \end{ppt}
 \begin{rmk}
     [Dedicatia]
+    这是因为 Borel 集族天然与拓扑结构兼容, 它是拓扑与测度协调得到的最好结果. 
+    \tcbline
     虽然 Borel 集族已经十分丰富, 但是它不是完备的. 例如 Cantor 集是 Borel 集, 但它的子集数目极其庞大, 存在不具有 Borel 测度的子集, 因为我们定义的时候并没有要求 Borel 集族对子集封闭, 但是直观感觉上这应该成立, 所以这就是我们将 Borel 集族扩展到可测集族的原因.
 \end{rmk}
 \begin{dfn}
@@ -954,7 +970,7 @@
     {一般函数的 Lebesgue 积分具有线性性, 可加性, 单调性, 绝对值不等式}
 \end{ppt}
 \begin{thm}
-    {夹逼定理}
+    {可测升降列逼近可积函数}
     设 \({\phi_n}\) 是可测升列, \(\{\psi_n\}\) 是可测降列, \(\phi_n\leq f\leq\psi_n\), \(\lim_{n\to\infty}\int_E (\phi_n-\psi_n)=0\). 则
     \begin{enumerate}
         \item \(f\) 可积;
@@ -972,7 +988,9 @@
     取极限, \(\int_E f = \lim_{n\to\infty} \int_E \phi_n\). 同样的, \(\int_E f = \lim_{n\to\infty} \int_E \psi_n\).
 \end{prf}
 \begin{thm}
+    [integrable-iff-measurable]
     {可积等价于可测}
+    [Integrable iff Measurable]
     设 $E\in\Measurable(\R)$, \(\Leb(E)<\infty\), \(f:E\to\R\), \(f\) 有界, 则可积 iff \(f\) 可测.
 \end{thm}
 \begin{prf}
@@ -1063,7 +1081,9 @@
     在 $\Leb(E)<\infty$ 时, 其逆命题也成立.
 \end{thm}
 \begin{thm}
+    [integral-absolute-continuity]
     {积分具有绝对连续性}
+    [Integral Absolute Continuity]
     设 $E\in\Measurable(\R)$, \(\Leb(E)<\infty\), \(f:E\to\R\) 是一个可积函数, 则 \(\forall\varepsilon>0\), \(\exists\delta>0\) 使得 \(\forall A\subseteq E, \Leb(A)<\delta, \int_A |f|<\varepsilon\).
 \end{thm}
 \begin{prf}
@@ -1429,10 +1449,12 @@
     则 \(\mathcal{F}\) 是 \(E_\eta\) 的 Vitali 覆盖 (由于 \(\alpha<\eta\), 所以 \(\mathcal{F}\) 不为空集). 根据 Vitali 覆盖定理, \(\exists\) 互不相交的 \(\{[x_i, y_i]\}_{i=1}^n \subseteq \mathcal{F}\), 使得 \(\Lebout(E_\eta \setminus \bigcup_{i=1}^n [x_i, y_i]) < \varepsilon\). 则
 \end{prf}
 \begin{thm}
+    [monotone-function-derivativity]
     {单调函数的可导性}
     设 \(f:(a,b)\to\R\) 是单调函数, 则 \(f\) 在 \((a,b)\) 上几乎处处可导.
 \end{thm}
 \begin{thm}
+    [monotone-function-derivative-integral]
     {单调函数导数的积分下半连续性}
     设 \(f:[a,b]\to\R\) 是单调递增函数, 则导函数是\MeasurableFunc{}, 且满足
     \[\int_a^b f'\leq f(b)-f(a).\]
@@ -1502,11 +1524,11 @@
 \begin{prf}
     提示: 设一族差商函数 \(\{\Delta_{h_n} f\}\), \(h_n \to 0\). 则其是非负可测. 根据 Fatou 引理和差商的定义即可.
 \end{prf}
-\fi
 \begin{thm}
     {收敛的函数项级数可以逐项积分}
     \(f_n\) 是 \((a,b)\) 上的单调递增可积函数, 且 \(\sum_{n=1}^{\infty}f_n<\infty\). 则 \(\sum_{n=1}^{\infty}f_n'\) 收敛, 且 \(\int_a^b \sum_{n=1}^{\infty}f_n' = \sum_{n=1}^{\infty}\int_a^b f_n'\).
 \end{thm}
+\fi
 \begin{dfn}
     [total-variation]
     {全变差}
@@ -1516,24 +1538,223 @@
     其中 \(P = \{a = x_0 < x_1 < \cdots < x_n = b\}\) 是 \((a,b)\) 上的任意一个分割.
 \end{dfn}
 \begin{dfn}
+    [bounded-variation-function]
     {有界变差函数}
+    [Bounded Variation Function]
     设 \(f:(a,b)\to\R\) 是一个函数, 当全变差 \(\Varia_a^b(f) < \infty\) 时, 称 \(f\) 是一个\textbf{有界变差函数}.
 \end{dfn}
+\begin{dfn}
+    [positive-negative-variation]
+    {正变差 / 负变差}
+    [Positive/Negative Variation]
+    设 \(f:(a,b)\to\R\) 是一个函数, 则定义 \(f\) 在 \((a,b)\) 上的正变差和负变差分别为
+    \[
+    \sup_{P} \sum_{i=1}^n (f(x_i) - f(x_{i-1}))^+, \quad \sup_{P} \sum_{i=1}^n (f(x_i) - f(x_{i-1}))^-.
+    \]
+    其中 \(P = \{a = x_0 < x_1 < \cdots < x_n = b\}\) 是 \((a,b)\) 上的任意一个分割. 显然有: 
+    \begin{enumerate}
+        \item \(\Varia_a^b(f) = \text{正变差} + \text{负变差}\).
+        \item \(f\) 是\BVFunc{}则 \(f(b)-f(a) = \text{正变差} - \text{负变差}\).
+    \end{enumerate}
+\end{dfn}
+\begin{thm}
+    {有界变差等价于单调函数的差}
+    设 \(f:(a,b)\to\R\) 是一个函数, 则 \(f\) 是\BVFunc{}当且仅当 \(f\) 可以表示为两个单调递增函数的差.
+\end{thm}
+\begin{thm}
+    {有界变差函数的连续性}
+    设 \(f:(a,b)\to\R\) 是\BVFunc{}, 则 \(f\) 在 \((a,b)\) 上至多有可数个不连续点.
+\end{thm}
 \begin{thm}
     {有界变差函数的可导性}
-    设 \(f:(a,b)\to\R\) 是一个有界变差函数, 则 \(f\) 在 \((a,b)\) 上几乎处处可导. 且满足
+    设 \(f:(a,b)\to\R\) 是\BVFunc{}, 则 \(f\) 在 \((a,b)\) 上几乎处处可导. 且满足
     \[\int_{a}^b |f'(x)| dx \leq \Varia_a^b(f)\]
 \end{thm}
 \begin{dfn}
-    {绝对连续性}
+    [absolutely-continuous-function]
+    {绝对连续函数}
+    [Absolutely Continuous Function]
     设 \(f:(a,b)\to\R\) 是一个函数, 则称 \(f\) 是绝对连续的, 当且仅当 \(\forall\varepsilon>0, \exists\delta>0\), 使得 \(\forall\{(x_i,y_i)\}_{i=1}^n\), \(a<x_1<y_1<\cdots<x_n<y_n<b\), 且 \(\sum_{i=1}^n (y_i-x_i)<\delta\) 时, \(\sum_{i=1}^n |f(y_i)-f(x_i)|<\varepsilon\).
 \end{dfn}
-\begin{cxmp}
-    {绝对连续不蕴含 Lipschitz 连续}
-    函数 \(f(x)=\sqrt{x}\) 是绝对连续的但不是 Lipschitz 连续的.
-\end{cxmp}
-\continued
+\begin{ppt}
+    {绝对连续函数是有界变差函数}
+    设 \(f:(a,b)\to\R\) 是\ACFunc{}, 则 \(f\) 是\BVFunc{}.
+\end{ppt}
+\begin{thm}
+    [derivative-almost-everywhere-zero-is-constant]
+    {导数几乎处处为 0 的绝对连续函数是常数}
+    设 \(f\) 是 \ACFunc{}, \(f'=0\cae\) 在 \([a,b]\) 上成立, 则 \(f\) 是常数函数.
+\end{thm}
+\begin{prf}
+    只需证明 \(\forall\,c\in[a,b], f(c)=f(a)\). 令 \(E\subseteq (a,c)\) 且 \(\Leb(E)=c-a\), \(f'(x)=0\). \\
+    则对任意 \(x\in E\), \(\exists[x,x+h]\subseteq [a,c]\), s.t. \(|f(x+h)-f(x)|<\eta h\), 其中 \(\eta>0\) 是任意小.\\
+    根据 \hyperref[thm:vitali-covering]{Vitali 覆盖定理}, \(\exists\) 互不相交的 \(\{[x_i,y_i]\}_{i=1}^n\), \(x_i\in E\), \(y_i>x_i\), 使得 
+    \[\Leb(E\setminus\bigcup_{i=1}^n [x_i, y_i])<\delta\]
+    取
+    \[y_0=a\leq x_1,<y_1\leq x_2<y_2 \leq \cdots < y_n\leq c=x_{n+1}\]
+    那么
+    \[\sum_{i=1}^n |f(y_i)-f(x_i)|<\eta\sum_{i=1}^n (y_i-x_i)<\eta(c-a)\]
+    根据 \(f\) 是\ACFunc{},
+    \[\sum_{i=0}^{n}|f_{k+1}-f(y_k)|<\epsilon\]
+    所以有
+    \[|f(c)-f(a)|\leq\sum_{i=0}^{n}|f(x_{k+1})-f(y_k)|+\sum_{i=1}^n |f(y_i)-f(x_i)|<\epsilon+\eta(c-a)\]
+    由于 \(\epsilon\) 和 \(\eta\) 任意小, \(f(c)=f(a)\).
+\end{prf}
+\begin{ppt}
+    {绝对连续函数的和差也是绝对连续函数}
+\end{ppt}
+\begin{ppt}
+    {绝对连续函数的积也是绝对连续函数}
+    这是因为闭区间上绝对连续函数是有界的.
+\end{ppt}
+\begin{dfn}
+    {奇异连续函数}
+    [Singular Continuous Function]
+    定义一个连续函数 \(f:[a,b]\to\R\) 是奇异连续的, 当且仅当 \(f'=0\cae\), 但 \(f\) 不是常数函数.
+\end{dfn}
+\begin{xmp}
+    {Cantor-Lebesgue 函数是奇异连续函数}
+    \hyperref[dfn:cantor-lebesgue-function]{Cantor-Lebesgue 函数}是一个奇异连续函数. 因为它在 \([0,1]\) 上连续, 且在 \([0,1]\setminus\mathfrak{C}\) 上可导且导数为 0, 但它不是常数函数.
+\end{xmp}
+\begin{ppt}
+    {有界变差连续函数是绝对连续函数与奇异连续函数的和}
+\end{ppt}
+\begin{rmk}
+    我们知道, 在有界闭区间上, 连续函数等价于一致连续函数也等价于有界变差连续函数. 但是在开区间的时候会有如下关系:
+    \begin{center}
+        Lipschitz 连续函数 \(\implies\) \ACFunc{} \(\implies\) \hyperref[dfn:bounded-variation-function]{有界变差的}连续函数 \(\implies\) 一致连续函数 \(\implies\) 连续函数
+    \end{center}
+    但是反过来都不成立.
+    \begin{center}
+        \begin{tabular}{c|c|c}
+            A \(\to\) B & 增加限制 & 反例: A, \(\lnot\) B \\
+            \hline
+            绝对连续 \(\to\) Lipschitz 连续 & 斜率 / 导数有界 & \([0,1]\) 上的 \(f(x)=\sqrt{x}\), \\
+            有界变差连续 \(\to\) 绝对连续 & 不能在零测集上产生增量 & Cantor-Lebesgue 函数 \\
+            一致连续 \(\to\) 有界变差连续 & 不能无限振荡 & \(f(x)=x\sin\frac{1}{x}\) \\
+            连续 \(\to\) 一致连续 & 连续程度需要一致控制 & \(f(x)=1/x\) 在 \((0,1]\) 上
+        \end{tabular}
+    \end{center}
+\end{rmk}
+\subsection{积微分}
+\begin{dfn}
+    {不定积分 / 积微分 / 反导数 / 原函数}
+    [Indefinite Integral / Antiderivative / Primitive Function]
+    设 \(f:[a,b]\to\R\) 是\IntegrableFunc{}, 定义它的\textbf{不定积分 / 积微分 / 一个原函数}为
+    \[F(x):=\int_a^x f(t) \dd{t}\]
+\end{dfn}
+\begin{thm}
+    [antiderivative-of-cbv]
+    {可积函数的不定积分是有界变差连续函数}
+    设 \(f:[a,b]\to\R\) 是\IntegrableFunc{}, 则 \(f\) 的不定积分 \(F\) 是\BVFunc{}且是连续函数.
+\end{thm}
+\begin{prf}
+    取任意的一个分割
+    \[a=x_0<x_1<\cdots<x_n=b \]
+    那么
+    \[\sum_{i=1}^n |F(x_i)-F(x_{i-1})|=\sum_{i=1}^n\abs{\int_{x_{i-1}}^{x_i}f(t)\dd{t}}\leq\sum_{i=1}^n\int_{x_{i-1}}^{x_i}\abs{f(t)}\dd{t}=\int_a^b |f(t)|\dd{t}  \]
+    所以全变差
+    \[\Varia_a^b(F) = \sup_P \sum_{i=1}^n |F(x_i)-F(x_{i-1})| \leq \int_a^b |f(t)|\dd{t} < \infty\]
+    从而 \(F\) 是\BVFunc{}.\\
+    由\hyperref[thm:integral-absolute-continuity]{积分的绝对连续性}可以得到 \(F\) 是连续函数.
+\end{prf}
+\begin{rmk}
+    事实上, 可积函数的不定积分是\ACFunc{}. 这正是定理\ref{thm:newton-leibniz}.
+\end{rmk}
+\begin{thm}
+    [zero-integral-is-zero-function-almost-everywhere]
+    {不定积分为零的可积函数几乎处处为零}
+    设 \(f:[a,b]\to\R\) 是\IntegrableFunc{}, 且 \(\forall\,x\in[a,b], \int_a^x f = 0\), 则 \(f=0\cae\) 在 \([a,b]\) 上成立.
+\end{thm}
+\begin{prf}
+    反证法: 假设 \(\Leb(E):=\Leb(\{x\in[a,b], f(x)>0\})>0\), 由于可测集差不多是闭集, 取闭集 \(F\subseteq E\), \(\Leb(E)>0\). 令 \(O:=(a,b)\setminus F\), 这显然是一个开集. 那么
+    \[\int_F f+\int_O f=0\]
+    \(O\) 是开集, 可以写成一列不相交的开区间 \(\{(a_n,b_n)\}_{n=1}^\infty\) 的并. 根据 Lebesgue 积分的可加性,
+    \[\int_O f=\sum_{n=1}^\infty \int_{a_n}^{b_n} f\]
+    所以必然对某一个 \(k\in\N\) 有 \(\int_{a_k}^{b_k}f\neq 0\). 但是 \(\int_a^b f =0\), 所以
+    \[\int_a^{a_k} f, \int^{b}_{b_k} f \]
+    其中必然有一个不为 0. 这与 \(\int_a^x f = 0\) 对任意 \(x\in[a,b]\) 成立矛盾. 从而 \(f=0\cae\) 在 \([a,b]\) 上成立. 
+\end{prf}
+\begin{thm}
+    [ftoc-bounded-measurable-function]
+    {有界可测函数的微积分基本定理}
+    若 \(f:[a,b]\to\R\) 是有界的\MeasurableFunc{}, 且
+    \[F(x):=\int_a^x f(t)\dd{t} + F(a)\]
+    那么 \(F'(x)=f(x)\cae\).
+\end{thm}
+\begin{prf}
+    首先根据定理\ref{thm:antiderivative-of-cbv}, 得到 \(F\) 是\BVFunc{}. 记 \(|f|\leq M\), 令
+    \[f_n(x)=n\qty(F(x+\frac{1}{n})-F(x))\]
+    有
+    \[f_n(x)=n\int_x^{x+\frac{1}{n}} f(t)\dd{t}\leq M.\]
+    由于 \(f_n\aelim F'\), 所以根据\hyperref[thm:bct]{有界收敛定理}:
+    \begin{align*}
+        \int_a^c F'(x)\dd{x} &=\lim_{n\to\infty}\int_a^c f_n(x) \\
+        &=\lim_{n\to\infty}n\int_{a}^{c}F\qty(x+\frac{1}{n})-F(x)\dd{x} \\
+        &=\lim_{h\to 0^+}\int_{a}^{c}F(x+h)-F(x)\dd{x} \\
+        &=\lim_{h\to 0^+}\qty(\frac{1}{h}\int_{c}^{c+h} F(x)\dd{x}-\frac{1}{h}\int_{a}^{a+h} F(x)\dd{x}) \\
+        &= F(c) - F(a)\\
+        &= \int_a^c f(t)\dd{t}.
+    \end{align*}
+    那么 \(\forall\,c\in [a,b]\), 
+    \[\int_a^c F'(x)\dd{x} = \int_a^c f(t)\dd{t}\]
+    根据定理\ref{thm:zero-integral-is-zero-function-almost-everywhere}, \(F'(x)=f(x)\cae\) 在 \([a,b]\) 上成立.
+\end{prf}
+\begin{thm}
+    [ftoc]
+    {微积分基本定理}
+    设 \(f:(a,b)\to\R\) 是\IntegrableFunc{}, 则 \(f\) 的不定积分 \(F\) 满足 \(F'(x)=f(x)\cae\) 在 \([a,b]\) 上成立.
+\end{thm}
+\begin{prf}
+    由于常数的导数为 0, 所以考虑函数
+    \[F(x)=F(a)+\int_a^x f(t)\dd{t}\]
+    不失一般性可以假设 \(f\geq 0\), 这时 \(F\) 成为单调函数. 由于 \(f\) 不一定是有界的, 所以定义一列函数
+    \[f_m(x):=\begin{cases}
+    f(x), & f(x)\leq m \\
+    m, & f(x)>m
+    \end{cases}\]
+    因而 \(f_m\nearrow f\) 当 \(m\to\infty\). 定义
+    \[G_n:=\int_a^x f-f_n\]
+    它是递增函数, 根据定理\ref{thm:monotone-function-derivativity}, 导数必定几乎处处存在. 根据定理\ref{thm:ftoc-bounded-measurable-function}, 
+    \[\qty(\int_a^x f_n)'=f_n(x)\cae\]
+    因此
+    \[F'(x)=(G_n(x))'+\qty(\int_a^x f_n)'\geq f_n(x), \cae\]
+    由于 \(n\) 是任意的, 令 \(n\to\infty\), \(F'(x)\geq f(x)\). 两边积分, 根据单调性有
+    \[\int_a^b F'(x)\dd{x}\geq \int_a^b f(x)\dd{x} = F(b)-F(a)\]
+    根据定理\ref{thm:monotone-function-derivative-integral}, \(\int_a^b F'(x)\dd{x}\leq F(b)-F(a)\). 从而两侧夹逼,
+    \[\int_a^b F'(x)\dd{x} = \int_a^b f(x)\dd{x}\]
+    由于 \(F'(x)-f(x)\geq 0\cae\), 所以只可能有 \(F'(x)-f(x)=0\cae\) 在 \([a,b]\) 上成立.
+\end{prf}
+\begin{rmk}
+    微积分基本定理讨论的是这样的问题:\\
+    \textrm{一个可积函数的变上限Lebesgue积分作为函数, 在什么条件下几乎处处可导, 且导数等于原来的函数?}
+    答案是只需要是可积函数(可测函数)即可.
+\end{rmk}
+\begin{thm}
+    [newton-leibniz]
+    {Newton-Leibniz 定理}
+    \(F\) 是 \(F'\) 的不定积分当且仅当 \(F\) 是 \ACFunc{}.
+\end{thm}
+\begin{prf}
+    首先根据定理\ref{thm:integral-absolute-continuity}, 不定积分是绝对连续函数. \\
+    假设 \(F\) 是绝对连续函数, 则 \(F\) 是有界变差函数, 导函数几乎处处存在. 设
+    \[F(x)=F_1(x)-F_2(x)\]
+    其中 \(F_1,F_2\) 都是单调增函数. 那么
+    \[|F'(x)|\leq F_1'(x)+F_2'(x)\]
+    根据定理\ref{thm:monotone-function-derivative-integral}, 
+    \[\int_a^b\abs{F'(x)}\dd{x}\leq F_1(b)+F_2(b)-F_1(a)-F_2(a)\]
+    令
+    \[G(x)=\int_a^x F'(t)\dd{t}\]
+    这是可积函数的不定积分, 所以也是绝对连续函数. 那么 \(H=F-G\) 也是绝对连续函数. 根据\ref{thm:ftoc}, \(H'=F'-G'=0\cae\). 根据定理\ref{thm:derivative-almost-everywhere-zero-is-constant}, \(H\) 是常数. 从而 \(F\) 是不定积分.
+\end{prf}
+\begin{rmk}
+    Newton-Leibniz 定理讨论的是这样的问题:\\
+    \textrm{一个函数的导数几乎处处存在且可积, 在什么条件下它积分积回来还是自己?}
+    答案是是对连续函数, 这个条件比可积函数要强很多. \textbf{任何一个函数的导数能够通过Lebesgue积分还原, 当且仅当这个函数本身是绝对连续的.}
+\end{rmk}
 \subsection{Lp 空间}
+此部分请参见【泛函分析】中有关 \(L^p\) 空间的内容.
+\iffalse
 \begin{dfn}*
     {快速 Cauchy 序列}
     序列 \(\{x_n\}_{n=1}^\infty\) 被称为快速 Cauchy 的, 当且仅当它的相邻两项差的序列是可和的.
@@ -1585,3 +1806,4 @@
     {具有紧支撑的连续函数在 Lp 空间中稠密}
     设 \(1\leq p\leq\infty\). 则具有紧支撑的连续函数在 \(L^p(E)\) 中稠密.
 \end{crl}
+\fi
