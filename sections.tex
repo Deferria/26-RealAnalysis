@@ -32,12 +32,13 @@
 \begin{rmk}
     这是选择公理的等价描述. 具体而言, 如果不存在这个极大元, 那么这个全序子集可以一直往上延伸, 直到达到一个矛盾. 这就是 Zorn 引理的核心思想.
 \end{rmk}
+\continued
 \section{Lebesgue 测度论}
 \subsection{基本概念}
 \begin{dfn}
     [limsup-liminf]
     {极限集}
-    [limsup / liminf]
+    [Limit Superior and Limit Inferior of Sets]
     对于可数集族 \(\{A_n\}_{n=1}^\infty\), 定义
     上极限集为 
     \[\limsup_{n\to\infty} A_n := \bigcap_{n=1}^\infty \bigcup_{k=n}^\infty A_k\]
@@ -63,19 +64,13 @@
 \end{rmk}
 \begin{rmk}
     [Dedicatia]
-    \(\sigma\)-代数不同于我们在抽象代数中定义的代数. 具体来讲, \(\sigma\)-代数是集合族上的结构, 对于集合族 \(\mathcal{F}\), 我们可以在其上定义二元运算:
+    如果遗忘可数封闭性, \(\sigma\)-代数就是我们在抽象代数中定义的代数. 具体来讲, \(\sigma\)-代数是集合族上的结构, 对于集合族 \(\mathcal{F}\), 我们可以在其上定义二元运算:
     \begin{itemize}
         \item 加法运算为对称差运算: \(A + B := (A\setminus B) \cup (B\setminus A)\)
         \item 乘法运算为交集运算: \(A \cdot B := A \cap B\)
     \end{itemize}
-    这两种运算满足环公理, 使得其是 Boolean 环.\\
-    如果取域 \(K:\{0,1\}\) 并规定数乘 
-    \begin{itemize}
-        \item \(0 \cdot A := \varnothing\)
-        \item \(1 \cdot A := A\)
-    \end{itemize}
-    则 \(\sigma\)-代数 \(\mathcal{F}\) 还满足线性空间的公理, 使得其是 Boolean 代数.\\
-    普通的代数仅要求满足有限次的并运算和交运算, 而 \(\sigma\)-代数要求满足可数次的并运算和交运算. 这使得 \(\sigma\)-代数在处理无限集合时更为强大, 但也更为复杂. 这就是 \(\sigma\)-代数与普通代数的区别.
+    这两种运算满足环公理并且是交换环, 由于 \(\forall\,A, A+A=\varnothing\), 所以环的特征是 2, 可以自然地作为 \(\F_2\) 上的向量空间.\\
+    普通的代数仅要求满足有限次的并运算和交运算, 而 \(\sigma\)-代数要求满足可数次的并运算和交运算. 这使得 \(\sigma\)-代数在处理无限集合时更为强大, 但也更为复杂.
 \end{rmk}
 \begin{xmp}
     [f-sigma-g-delta]
@@ -86,9 +81,10 @@
 \end{xmp}
 \begin{ppt}
     {F-sigma 集与 G-delta 集互为补集}
-    \(X\) 是\Fsigma{}当且仅当 \(X^c\) 是 \Gdelta{}集.
+    \(X\) 是\Fsigma{}当且仅当 \(X^c\) 是 \Gdelta{}.
 \end{ppt}
 \begin{rmk}
+    [AI]
     理解符号的含义有助于记忆:
     \begin{itemize}
         \item F-sigma 集中的 F 代表法语单词 ``Fermé'', 意为 ``闭集'', sigma 代表法语单词 ``Somme'', 意为``并'', 因此 F-sigma 集是可数闭集的并集.
@@ -335,7 +331,7 @@
         \item \(\forall\varepsilon>0\), \(\exists\) 开集 \(U\) 使得 \(X\subseteq U\) 且 \(\Lebout(U\setminus X)<\varepsilon\);
         \item \(\forall\varepsilon>0\), \(\exists\) 闭集 \(F\) 使得 \(F\subseteq X\) 且 \(\Lebout(X\setminus F)<\varepsilon\).
     \end{enumerate}
-    使用 \Fsigma{}和 \Gdelta{}集的语言:
+    使用 \Fsigma{}和 \Gdelta{}的语言:
     \begin{enumerate}[label=(\arabic*), start=3]
         \item \(\exists\) F-sigma 集 \(F\) 使得 \(F\subseteq X\) 且 \(\Lebout(X\setminus F)=0\);
         \item \(\exists\) G-delta 集 \(G\) 使得 \(X\subseteq G\) 且 \(\Lebout(G\setminus X)=0\).
@@ -375,9 +371,9 @@
 \begin{rmk}
     Littlewood 的三个原理分别是:
     \begin{enumerate}
-        \item \MeasurableSet{}差不多是开集; 这一点在\hyperref[thm:littlewood-first]{Littlewood 第一原理}中得到了体现;
-        \item \MeasurableFunc{}差不多是连续函数; 这一点是\hyperref[thm:lusin]{Lusin 定理}的内容;
-        \item 逐点收敛差不多是一致收敛. 这一点是\hyperref[thm:egorov]{Egorov 定理}的内容.
+        \item \MeasurableSet{}差不多是开集; 这一点在\ref{thm:littlewood-first}和\ref{thm:measurability}中得到了体现;
+        \item \MeasurableFunc{}差不多是连续函数; 这是\hyperref[thm:lusin]{Lusin 定理}的内容;
+        \item 几乎处处收敛差不多是一致收敛. 这是\hyperref[thm:egorov]{Egorov 定理}的内容.
     \end{enumerate}
 \end{rmk}
 \begin{prf}
@@ -918,6 +914,11 @@
     \[\int_E f := \sup\qty{\int_E h, h:E\to\R, 0\leq h\leq f}\]
     其中 \(h\) 是有界\MeasurableFunc{}, \(\Leb(\{x\in E, h(x)\neq 0\})<\infty\). 若 \(\int_E f<\infty\), 则称 \(f\) 在 \(E\) 上 Lebesgue 可积.
 \end{dfn}
+\begin{dfn}
+    {可积函数}
+    [Integrable Function]
+    定义一个非负函数 \(f:E\to\R\) 是 \textbf{Lebesgue 可积的}, 当且仅当其 Lebesgue 积分存在且不为无穷.
+\end{dfn}
 \begin{thm}
     [chebyshev-inequality]
     {Chebyshev 不等式}
@@ -1062,8 +1063,8 @@
 \end{prf}
 \begin{dfn}
     [uniform-integrability]
-    {一致可积性}
-    [Uniform Integrability]
+    {一致可积 / 等积性}
+    [Uniform Integrability / Equiintegrability]
     设 $E\in\Measurable(\R)$, \(\Leb(E)<\infty\), \(\mathcal{F}\) 是\MeasurableFunc{}族, 则称 \(\{f_n\}\) 在 \(E\) 上\textbf{一致可积}, 当且仅当 
     \(\forall\varepsilon>0\), \(\exists \delta>0\) 使得 $\forall A\subseteq E, \Leb(A)<\delta, \int_A |f_n|<\varepsilon, \forall f\in\mathcal{F}$.
 \end{dfn}
@@ -1080,6 +1081,25 @@
     使得 \(\forall i, \Leb(E_i)<\varepsilon\).\\
     在 $\Leb(E)<\infty$ 时, 其逆命题也成立.
 \end{thm}
+\begin{thm}
+    {Lebesgue 积分的可数可加性}
+    设 \(f\) 是 \(E\) 上的 \MeasurableFunc{}, \(\{E_n\}_{n=1}^{\infty}\) 是 \(E\) 的可数个两两不交的可测子集, 则
+    \[\int_E f = \sum_{n=1}^{\infty} \int_{E_n} f.\]
+\end{thm}
+\begin{prf}
+    令 
+    \[f_n:=f\cdot\Char{\bigcup_{k=1}^{n}E_k} \]
+    那么 \(f_n\) 显然是可测函数且
+    \[|f_n|\leq |f|\]
+    注意 
+    \[f_n\aelim f, \text{ when } n\to\infty \]
+    根据\hyperref[thm:dct]{控制收敛定理}, \(f\) 可积, 且
+    \[\int_E f=\lim_{n\to\infty}\int_E f_n\]
+    又因为积分本有的有限可加性
+    \[\int_E f_n=\sum_{k=1}^n\int_{E_k}f\]
+    所以有
+    \[\int_E f = \sum_{n=1}^{\infty} \int_{E_n} f.\]
+\end{prf}
 \begin{thm}
     [integral-absolute-continuity]
     {积分具有绝对连续性}
@@ -1115,30 +1135,45 @@
     \end{cases}\]
     则 \(f_n\aelim 0\), \(f_n\) 一致可积, \(\int_{\R} f_n=1\), \(\int_{\R} 0=0\). 这说明了极限不能交换. Egorov 定理不成立导致了失效.
 \end{rmk}
-\begin{rmk}
-    设 $E\in\Measurable(\R)$, \(\Leb(E)<\infty\), \(h_n\) 是\MeasurableFunc{}列, \(h_n\to 0\cae\), 则 \(\lim_{n\to\infty}\int_E h_n=0\) iff \(\{h_n\}\) 在 \(E\) 上一致可积.
-\end{rmk}
 \begin{thm}
-    {}
-    \(E:\Measurable(\R)\), \(\forall\varepsilon>0\), \(\exists E_0\subseteq E\), \(\Leb(E_0)<\infty\), \(\int_{E\subseteq E_0} |f|<\varepsilon\)
+    {收敛到常数的 Vitali 收敛定理}
+    设 $E\in\Measurable(\R)$, \(\Leb(E)<\infty\), \(h_n\) 是\MeasurableFunc{}列, \(h_n\to 0\cae\), 则 \(\lim_{n\to\infty}\int_E h_n=0\) iff \(\{h_n\}\) 在 \(E\) 上一致可积.
+\end{thm}
+\begin{prf}
+    "(\(\implies\))": 若 \(\{h_n\}\) 是一致可积的, 则直接使用\hyperref[thm:vct-1]{Vitali 收敛定理}即可.\\
+    "(\(\impliedby\))": 设
+    \[\lim_{n\to\infty}\int_E h_n=0\]
+    取 \(\epsilon>0\) 为任意小, 则 \(\exists\,N\in\N\) s.t. \(\int_Eh_n<\epsilon, n>N\). 这时使用\hyperref[thm:egorov]{Egorov 定理}, \(\exists E_0\subseteq E\), \(\Leb(E\setminus E_0)<\epsilon\), \(h_n\rightrightarrows 0\) 在 \(E_0\) 上. 这时 \(\forall n>N, \int_E h_n = \int_{E_0} h_n + \int_{E\setminus E_0} h_n < \epsilon + M\epsilon\), 其中 \(M=\sup_{n>N}\sup_{x\in E}|h_n(x)|<+\infty\). 从而 \(\{h_n\}\) 在 \(E\) 上一致可积.
+\end{prf}
+\begin{thm}
+    {可积函数的积分集中在有限测度的子集上}
+    \(E:\Measurable(\R)\), \(f\) 是 \(E\) 上的\IntegrableFunc{}. \(\forall\varepsilon>0\), \(\exists E_0\subseteq E\), \(\Leb(E_0)<\infty\), \(\int_{E\subseteq E_0} |f|<\varepsilon\)
 \end{thm}
 \begin{rmk}
     这个定理说明了即使集合本身测度无限, 但可积函数的积分几乎全部集中在了有限测度的子集上. 这也是我们定义测度紧致性的动机.
 \end{rmk}
+\begin{prf}
+    根据非负可测函数的积分的定义, 存在有界可测函数 \(g\) 使得 \(g\) 在 \(E\) 的有限测度的子集 \(E_0\) 之外都为 0 且满足 \(0\leq g\leq |f|\), \(\int_E (|f|-g)<\varepsilon\). 从而 
+    \[\int_{E\setminus E_0} |f| = \int_{E\setminus E_0} (|f|-g) < \varepsilon. \]
+\end{prf}
 \begin{dfn}
     [measure-tightness]
     {测度紧性}
-    设 $E\in\Measurable(\R)$, 称函数族 \(\mathcal{F}\) 是测度紧致的, 当且仅当 \(\forall\varepsilon>0\), \(\exists E_0\subseteq E\), \(\Leb(E_0)<\infty\), \(\int_{E\setminus E_0} |f|<\varepsilon, \forall f\in\mathcal{F}\).
+    设 $E\in\Measurable(\R)$, 称函数族 \(\mathcal{F}\) 是\textbf{测度紧的}, 当且仅当 
+    \[\forall\varepsilon>0, \exists E_0\subseteq E, \st \Leb(E_0)<\infty, \int_{E\setminus E_0} |f|<\varepsilon, \forall f\in\mathcal{F}\]
 \end{dfn}
 \begin{thm}
     [vct-2]
-    {一般的 Vitali 收敛定理}
+    {一般 Vitali 收敛定理}
     设函数列 \(f_n\) 是一致可积且测度紧致的, \(f_n\aelim f\) 则 \(f\) 可积, 且 \(\int_E f = \lim_{n\to\infty}\int_E f_n\).
 \end{thm}
 \begin{crl}
-    {Vitali 收敛定理的推论}
+    {收敛到常数的一般 Vitali 收敛定理}
     几乎处处收敛到 0 的函数列的极限与积分可交换当且仅当该函数列一致可积且测度紧.
 \end{crl}
+\begin{rmk}
+    直观上理解 Vitali 收敛定理的两个条件, 一致可积阻止了函数在任意小测度的集合上产生不任意小的积分, 测度紧性阻止了函数在有限测度集合外产生不任意小的积分. 这两个条件加在一起共同保证了函数列的极限与积分可以交换.
+\end{rmk}
 \subsection{依测度收敛}
 \begin{dfn}
     [convergence-in-measure]
@@ -1307,6 +1342,7 @@
     (4) 一个集合是某个导函数的不连续点, 当且仅当它是第一纲集.\\
     (5) 处处连续且至少有一点可微的函数构成连续函数的第一纲集.
 \end{rmk}
+有关 Baire 纲理论, 可参见【泛函分析】中的内容.
 \begin{ins}
     {Dirichlet 函数}
     定义 \(f:[0,1]\to\R\) 如下:
@@ -1351,6 +1387,9 @@
     \[\int_I \omega_f = 0\]
     从而 \(\omega_f=0\cae\). 这说明 \(f\) 的不连续点是一个零测集.
 \end{prf}
+\begin{rmk}
+    Riemann 可积的充要条件是由 Lebesgue 给出的. 这说明了 Riemann 积分的局限性: 只有当函数的振幅函数几乎处处为 0 时, 才能使用 Riemann 积分, 这导致了很多直观上应该可积的函数没有 Riemann 积分. 而 Lebesgue 积分则没有这个限制, 可以处理更广泛的函数.
+\end{rmk}
 \section{Lebesgue 微分}
 \subsection{单调函数的微分}
 \begin{dfn}
@@ -1703,6 +1742,7 @@
 \begin{thm}
     [ftoc]
     {微积分基本定理}
+    [Fundamental Thoerem of Calculus]
     设 \(f:(a,b)\to\R\) 是\IntegrableFunc{}, 则 \(f\) 的不定积分 \(F\) 满足 \(F'(x)=f(x)\cae\) 在 \([a,b]\) 上成立.
 \end{thm}
 \begin{prf}
@@ -1750,7 +1790,7 @@
 \begin{rmk}
     Newton-Leibniz 定理讨论的是这样的问题:\\
     \textrm{一个函数的导数几乎处处存在且可积, 在什么条件下它积分积回来还是自己?}
-    答案是是对连续函数, 这个条件比可积函数要强很多. \textbf{任何一个函数的导数能够通过Lebesgue积分还原, 当且仅当这个函数本身是绝对连续的.}
+    答案是\ACFunc{}. \textbf{任何一个函数的导数能够通过Lebesgue积分还原, 当且仅当这个函数本身是绝对连续的.}
 \end{rmk}
 \subsection{Lp 空间}
 此部分请参见【泛函分析】中有关 \(L^p\) 空间的内容.
