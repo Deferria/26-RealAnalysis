@@ -2,8 +2,8 @@
 \section*{\presectionname}
 \addcontentsline{toc}{section}{\presectionname}
 这是笔者 \Dedicatia{} 在上海交通大学数学科学学院的本科期间的【实变函数】的课程笔记. 
-【实变函数】又名【实分析】, 是标准分析学中的基础课程. 课程内容主要包含 Lebesgue 测度论和 Lebesgue 积分理论, 然后自然地扩展到一般的测度上, 作为应用, 还将研究可积函数空间的种种性质, 作为泛函分析等更高级的课程的切入点. \\
-在撰写过程中主要参考了以下教材:
+【实变函数】又名【实分析】, 是标准分析学中的基础课程. 课程内容主要包含 Lebesgue 测度论、积分理论和推广的微积分基本定理. 作为应用, 还将研究可积函数空间的种种性质, 作为泛函分析等更高级的课程的切入点, 例如, \(L^2\) 空间就是天然的无限维 Hilbert 空间, 函数的 Lebesgue 可积性理论还为概率论提供了理论基石, 因此, 实变函数论在现代数学中占据了重要的地位. 通过学习实变函数论, 学生可以掌握分析学的核心工具和方法, 为后续的数学学习和研究打下坚实的基础.
+在笔记撰写过程中主要参考了以下教材:
 \begin{itemize}
     \item \textit{Real Analysis}, H. L. Royden
     \item 华章译丛对上书的中译本, 机械工业出版社
@@ -12,6 +12,12 @@
     \item 实变函数论与泛函分析（上册）, 夏道行 等, 高等教育出版社
     \item 实变函数解题指南, 周民强, 北京大学出版社
 \end{itemize}
+另外, 已经将项目开源在 Github 中, 地址为 \href{https://github.com/Deferria/26-RealAnalysis}{此处}.
+\vspace{\baselineskip}\\
+{\Large 鉴于笔者水平有限, 笔记中难免存在错误, 欢迎指正.}
+\vspace{\baselineskip}\\
+\textcolor{darkpurple}{最后更新于: \today.}
+\vspace{5em}\\
 我们将从介绍前置知识开始.
 \begin{thm}
     [AC]
@@ -859,6 +865,7 @@
     Riemann 下积分 \(\leq\) Lebesgue 下积分 \(\leq\) Lebesgue 上积分 \(\leq\) Riemann 上积分. 由于 Riemann 可积, 则 Riemann 下积分 \(=\) Riemann 上积分, 从而得到 \(\int_I f\) 存在且等于 Riemann 积分.
 \end{prf}
 \begin{thm}
+    [measurable-of-integrable]
     {可测函数一定可积}
     设 $E\in\Measurable(\R)$, \(\Leb(E)<\infty\), \(f:E\to\R\) 是一个有界的\MeasurableFunc{}, 则 \(f\) 在 \(E\) 上 Lebesgue 可积.
 \end{thm}
@@ -954,7 +961,7 @@
 \begin{rmk}
     我们构造 Lebesgue 积分的方式为
     \begin{center}
-        \(\phi\) \SimpleFunc{} -- \(h\) 有界可测函数 -- \(f\) 非负可测函数.
+        \(\phi\) \SimpleFunc{} -- \(h\) 有界可测函数 -- \(f\) 非负可测函数 -- 一般的可积函数.
     \end{center}
     如果不这样而直接定义非负可测函数, 证明线性性的时候就会变得非常麻烦, 需要使用单调收敛定理.
 \end{rmk}
@@ -995,7 +1002,7 @@
     设 $E\in\Measurable(\R)$, \(\Leb(E)<\infty\), \(f:E\to\R\), \(f\) 有界, 则可积 iff \(f\) 可测.
 \end{thm}
 \begin{prf}
-    "($\impliedby$)": 已经证明了可测函数一定可积.\\
+    "($\impliedby$)": 已经证明了可测函数一定可积, 在定理\ref{thm:measurable-of-integrable}.\\
     "($\implies$)": 由定义, \(\exists\phi_n, \psi_n\) 是\SimpleFunc{}列, s.t. \(\phi_n\leq f\leq\psi_n\), \(\int_E (\psi_n-\phi_n)\to 0\). 取 \(\phi'_n:=\max_{1\leq i\leq n}\phi_n\), \(\psi'_n:=\min_{1\leq i\leq n}\psi_n\). 则 \(\phi'_n\) 是可测升列, \(\psi'_n\) 是可测降列, \(\phi'_n\leq f\leq\psi'_n\), \(\int_E (\psi'_n-\phi'_n)\to 0\). 从而 \(f\) 可测.
 \end{prf}
 \subsection{逐点收敛与 L1 收敛的关系}
@@ -1233,6 +1240,10 @@
     \end{cases}\]
     则 \(f_n\) 依测度收敛到 \(f(x)=0\), 但 \(f_n\) 不逐点收敛到 \(f\). 这说明了\hyperref[dfn:convergence-in-measure]{依测度收敛}不蕴含几乎处处收敛.
 \end{cxmp}
+\begin{rmk}
+    [Dedicatia]
+    收敛可以诱导拓扑. 但是依测度收敛诱导的拓扑非常弱, 它是不可度量化的. 
+\end{rmk}
 \begin{ins}
     {特征函数的收敛方式}
     设 \(E_k\) 是 \(\R\) 中的一列\MeasurableSet{}, 则:
@@ -1244,6 +1255,7 @@
 \begin{thm}
     [riesz]
     {F.Riesz 定理}
+    依测度收敛的函数列有几乎处处收敛的子列, 且极限相同.\\
     $f_n\mlim f$ \(\implies f_{n_k}\subseteq f_n, f_{n_k}\aelim f\).
 \end{thm}
 \begin{prf}
@@ -1272,7 +1284,7 @@
 \begin{thm}
     {依测度收敛下的各收敛定理仍然成立}
     [Convergence Theorems under Convergence in Measure]
-    \hyperref[thm:fatou]{Fatou 引理}, \hyperref[thm:mct]{单调收敛定理}, \hyperref[thm:dct]{控制收敛定理}, \hyperref[thm:lct]{Lebesgue 收敛定理}, \hyperref[thm:vct-1]{Vitali 收敛定理}, \hyperref[thm:vct-2]{一般的 Vitali 收敛定理} 在\hyperref[dfn:convergence-in-measure]{依测度收敛}的条件下仍然成立.
+    \hyperref[thm:fatou]{Fatou 引理}, \hyperref[thm:mct]{单调收敛定理}, \hyperref[thm:dct]{控制收敛定理}, \hyperref[thm:lct]{Lebesgue 收敛定理}, \hyperref[thm:vct-1]{Vitali 收敛定理}, \hyperref[thm:vct-2]{一般的 Vitali 收敛定理} 在\hyperref[dfn:convergence-in-measure]{依测度收敛}的条件下仍然成立. 其原因是总可以从依测度收敛的函数列中找到几乎处处收敛的子列, 对子列使用原先的收敛定理, 再根据积分序列作为实数序列的极限唯一性来得到结论.
 \end{thm}
 \begin{crl}
     {几乎处处收敛与依测度收敛有相同极限}
@@ -1316,7 +1328,7 @@
         \begin{tabular}{c|cccccc}
             是否收敛到\(0\)? & \makecell{(0) 有限测度上的\\简单函数升列} & (1) \(f_n=\chi_{[n,n+1]}\) & (2) \(f_n=n\chi_{[0,\frac{1}{n}]}\) & (3) \(f_n=\frac{\chi_{[0,n]}}{n}\) & (4) Typewriter 序列 & (5) \makecell{\([0,2\pi]\) 上的 \\ \(f_n=1+\sin(nx)\)} \\
             \hline
-            特点 & 性质最好 & 不受控地左右移动 & 爆炸到了无穷高 & 逃逸到了无穷远 & 每个点都不收敛 & 不仅不收敛还反复振荡 \\
+            特点 & 性质最好 & 可以左右移动 & 爆炸到了无穷高 & 逃逸到了无穷远 & 每个点都不收敛 & 每个点都振荡 \\
             \hline
             几乎一致收敛 & \checkmark & \checkmark & \checkmark & \checkmark & \texttimes & \texttimes \\
             几乎处处收敛 & \checkmark & \texttimes & \texttimes & \checkmark & \texttimes & \texttimes \\
@@ -1597,9 +1609,23 @@
     \end{enumerate}
 \end{dfn}
 \begin{thm}
-    {有界变差等价于单调函数的差}
+    {Jordan 分解定理}
+    [Jordan Decomposition Theorem]
+    有界变差等价于单调增函数的差. \\
     设 \(f:(a,b)\to\R\) 是一个函数, 则 \(f\) 是\BVFunc{}当且仅当 \(f\) 可以表示为两个单调递增函数的差.
 \end{thm}
+\begin{prf}
+    "(\(\implies\))": 若 \(f\) 是\BVFunc{}, 则
+    \[f(x)=(f(x) + \Varia_a^x(f)) - \Varia_a^x(f)\]
+    这正是两个单调增函数.\\
+    "(\(\impliedby\))": 设 \(f=g-h\), \(g,h\) 是增函数. 取任意一种划分 \(P\):
+    \begin{align*}
+        \sum_{i=1}^k |f(x_i)-f(x_{i-1})| &= \sum_{i=1}^k |(g(x_i)-g(x_{i-1}))-(h(x_i)-h(x_{i-1}))|\\
+        &\leq \sum_{i=1}^k |g(x_i)-g(x_{i-1})| + \sum_{i=1}^k |h(x_i)-h(x_{i-1})|\\
+        &= (g(b)-g(a)) + (h(b)-h(a))
+    \end{align*}
+    所以 \(\Varia_a^b(f) < \infty\), \(f\) 是\BVFunc{}.
+\end{prf}
 \begin{thm}
     {有界变差函数的连续性}
     设 \(f:(a,b)\to\R\) 是\BVFunc{}, 则 \(f\) 在 \((a,b)\) 上至多有可数个不连续点.

@@ -6,24 +6,26 @@
 
 \usepackage{setspace}
 
+\newtoggle{usefont}
+\toggletrue{usefont}
+
+% When usefont is false, the default font will be used, which is more compatible with different platforms. 
+%\togglefalse{usefont}
+
+% fonts:
 \usepackage{fontspec}
-\setmainfont[Path="V:/Fonts/Eng/",AutoFakeBold=3,AutoFakeSlant=0.25]{BASKVILL.TTF}
-\setsansfont[Path="V:/Fonts/Eng/",AutoFakeBold=3,AutoFakeSlant=0.25]{POORICH.TTF}
-\setmonofont[Path="V:/Fonts/Eng/",AutoFakeBold=3,AutoFakeSlant=0.25]{cour.ttf}
+\iftoggle{usefont}{
+    \setmainfont[Path="V:/Fonts/Eng/",AutoFakeBold=3,AutoFakeSlant=0.25]{BASKVILL.TTF}
+    \setsansfont[Path="V:/Fonts/Eng/",AutoFakeBold=3,AutoFakeSlant=0.25]{POORICH.TTF}
+    \setmonofont[Path="V:/Fonts/Eng/",AutoFakeBold=3,AutoFakeSlant=0.25]{cour.ttf}
+}{}
 
 \usepackage{xeCJK}
-\setCJKmainfont[Path="V:/Fonts/Zh/",AutoFakeSlant=0.2,AutoFakeBold=3]{STZHONGS.TTF}
-\setCJKsansfont[Path="V:/Fonts/Zh/",AutoFakeSlant=0.2,AutoFakeBold=3]{STKAITI.ttf}
-\setCJKmonofont[Path="V:/Fonts/Zh/",AutoFakeSlant=0.2,AutoFakeBold=3]{simfang.ttf}
-
-\newfontfamily{\yh}[AutoFakeSlant=0.225,AutoFakeBold=3]{Microsoft YaHei}
-\newfontfamily{\fontik}[AutoFakeSlant=0.225,AutoFakeBold=3,Path="V:/Fonts/Eng/"]{Inkfree.ttf}
-\newfontfamily{\fontss}[AutoFakeSlant=0.225,AutoFakeBold=3,Path="V:/Fonts/Eng/"]{HARNGTON.TTF}
-\newfontfamily{\fontfl}[AutoFakeSlant=0.225,AutoFakeBold=3,Path="V:/Fonts/Eng/"]{FTLTLT.TTF}
-\newfontfamily{\fontch}[AutoFakeSlant=0.225,AutoFakeBold=3,Path="V:/Fonts/Eng/"]{CHILLER.TTF}
-\newfontfamily{\fontrm}[AutoFakeSlant=0.225,AutoFakeBold=3,Path="V:/Fonts/Eng/"]{ERASLGHT.TTF}
-\newfontfamily{\fontbk}[AutoFakeSlant=0.225,AutoFakeBold=3,Path="V:/Fonts/Eng/"]{BOOKOS.TTF}
-\newfontfamily{\fontlr}[AutoFakeSlant=0.225,AutoFakeBold=3,Path="V:/Fonts/Eng/"]{LBRITEI.TTF}
+\iftoggle{usefont}{
+    \setCJKmainfont[Path="V:/Fonts/Zh/",AutoFakeSlant=0.2,AutoFakeBold=3]{STZHONGS.TTF}
+    \setCJKsansfont[Path="V:/Fonts/Zh/",AutoFakeSlant=0.2,AutoFakeBold=3]{STKAITI.ttf}
+    \setCJKmonofont[Path="V:/Fonts/Zh/",AutoFakeSlant=0.2,AutoFakeBold=3]{simfang.ttf}
+}{}
 
 \usepackage{amsmath,amssymb,amsthm,amsfonts,mathrsfs}
 \usepackage{mathtools}
@@ -121,7 +123,7 @@
 \NewDocumentEnvironment{prf}{+b}{
     \iftoggle{showproof}{\begin{tcolorbox}
     [enhanced, colback=lightgray!50!white, boxrule=0pt, frame hidden, breakable, after upper={\hfill$\square$}]
-    {{\large\textit{Proof:}}\newline\fontik}#1}{}
+    {{\large\textit{Proof:}}\newline}#1}{}
 }{\iftoggle{showproof}{\end{tcolorbox}}{}}
 
 % remark:
@@ -342,7 +344,7 @@
 \newcommand{\bysorry}{\fcolorbox{white}{gray!20!white}{\texttt{\textcolor{black}{:= }\textcolor{blue}{by }\textcolor{red}{\textbf{sorry}}}}\;\faTimesCircle\;\,\texttt{\textcolor{gray}{{\footnotesize declaration uses 'sorry'.}}}}
 
 % signature
-\newcommand{\Dedicatia}{{\fontik\textcolor{darkpurple}{Dedicatia}}}
+\newcommand{\Dedicatia}{{\texttt{\textcolor{darkpurple}{Dedicatia}}}}
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
