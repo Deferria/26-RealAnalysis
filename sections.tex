@@ -658,7 +658,8 @@
     其中 \(\{x\in\R: |f_n(x)-f_m(x)|<\frac{1}{k}\}=\{x\in\R: f_n(x)-f_m(x)<\frac{1}{k}\}\cap \{x\in\R: f_n(x)-f_m(x)>-\frac{1}{k}\}\) 是可测集. 因此, 收敛点集是可测集.
 \end{prf}
 \begin{crl}
-    {几乎处处收敛的可测函数列的极限函数也是可测函数}
+    [pointwise-limit-measurable]
+    {可测函数的逐点极限函数是可测函数}
     设 \(f_n\) 是一列\MeasurableFunc{}, \(f_n\aelim f\) 在 \(E\) 上成立, 则 \(f\) 也是一个\MeasurableFunc{}.
 \end{crl}
 \begin{ppt}
@@ -813,12 +814,16 @@
 \begin{thm}
     [approximated-by-continuous-function]
     {连续函数列逼近可测函数}
-    设 \(f\) 是\MeasurableFunc{}, 则存在连续函数列 \(\{g_n\}_{n=1}^\infty\) 使得 \(g_n\aelim f\).\\
+    \(f\) 是\MeasurableFunc{}, 当且仅当存在连续函数列 \(\{g_n\}_{n=1}^\infty\) 使得 \(g_n\aelim f\).\\
     若 \(f\) 是有界的, 则 \(g_n\) 可以是一致有界的.
 \end{thm}
 \begin{rmk}
     仍然使用 Lusin 定理的证明, 只不过一列连续函数相较于一个连续函数可以将任意小测度的集合变成零测集.
 \end{rmk}
+\begin{prf}
+    若存在一列连续函数 \(g_n\), 则 \(g_n\) 都是可测函数. 根据定理\ref{crl:pointwise-limit-measurable}, \(g_n\aelim f\) 可得 \(f\) 可测.\\
+    另一边: \(f\) 是可测函数, 则根据 \hyperref[thm:lusin]{Lusin 定理}可取一列闭集 \(F_n\) 和一列连续函数 \(g_n\) 使得 \(f\) 限制在 \(F_n\) 上就是 \(g_n\). 只需令 \(F_n\) 满足 \(\Leb(E\setminus E_n)=\frac{1}{2^n}\), 再利用端点值将 \(g_n\) 延拓到 \(\R\) 上即可得到符合条件的 \(g_n\).
+\end{prf}
 \subsection{非负 Lebesgue 积分}
 \begin{dfn}
     {简单函数的 Lebesgue 积分}
@@ -874,7 +879,9 @@
     \[0\leq\int_E(\psi_n-\phi_n)=\int_E(\phi_n-\psi_n)\leq\int_E\frac{1}{n}= \frac{\Leb(E)}{n}.\]
 \end{prf}
 \begin{rmk}
-    稍后我们将看到, 可测函数等价于可积函数.
+    可测函数等价于可积函数, 见定理\ref{thm:integrable-iff-measurable}. \\
+    但是如果去掉有界性限制, 可测不一定可积. 例如, \(f(x)=\frac{1}{x}\) 在 \((0,1)\) 上可测, 但是不可积. 
+    去掉测度有限的限制, 可测函数也不一定可积. 例如, \(f(x)=1\) 在 \(\R\) 上可测, 但是不可积. 这是因为可积的定义是积分不能为 \(\infty\).
 \end{rmk}
 \begin{ppt}
     {可测函数的 Lebesgue 积分具有线性性, 单调性, 绝对值不等式}
@@ -1014,7 +1021,7 @@
     \[\int_E f \leq \liminf_{n\to\infty} \int_E f_n\]
 \end{thm}
 \begin{prf}
-    由于零测集上的积分是 0, 所以可以假设 \(f_n\to f\). 设 \(h\) 是哟个限制在有限测度集合 \(E'\subseteq E\) 上的有界可测函数, \(0\leq h\leq f\), 定义一列
+    由于零测集上的积分是 0, 所以可以假设 \(f_n\to f\). 设 \(h\) 是一个限制在有限测度集合 \(E'\subseteq E\) 上的有界可测函数, \(0\leq h\leq f\), 定义一列
     \[h_n=\min\{f_n, h\}\]
     那么 \(h_n\) 是有界的可测函数. 根据\hyperref[thm:bct]{有界收敛定理}:
     \[\int_{E'} h = \lim_{n\to\infty} \int_{E'} h_n\leq\liminf_{n\to\infty} \int_E f_n \]
@@ -1185,6 +1192,7 @@
 \begin{dfn}
     [convergence-in-measure]
     {依测度收敛}
+    [Convergence in Measure]
     设 $E\in\Measurable(\R)$, \(f_n:E\to\R\) 是\MeasurableFunc{}列, 则称 \(f_n\) 依测度收敛到 \(f\), 当且仅当 
     \[\forall\varepsilon>0, \lim_{n\to\infty} \Leb(\{x\in E, |f_n(x)-f(x)|>\varepsilon\})=0.\]
     记作 \(f_n\mlim f\).
@@ -1547,6 +1555,15 @@
     \end{itemize}
     两侧夹逼, 得到坏点组成的集合的测度必须为 0.
 \end{rmk}
+\begin{thm}
+    {几乎处处可导的函数的导数几乎处处可测}
+    \(f\) 在 \((a,b)\) 上几乎处处可导, 则 \(f'\) 在 \((a,b)\) 上可测.
+\end{thm}
+\begin{prf}
+    只需令
+    \[g_n=n\qty(f\qty(x+\frac{1}{n})-f(x))\]
+    这是一列可测函数且 \(g_n\aelim f'\). 根据定理\ref{crl:pointwise-limit-measurable}, \(f'\) 可测
+\end{prf}
 \subsection{有界变差函数与绝对连续函数}
 \begin{dfn}
     {差商}
@@ -1818,6 +1835,19 @@
     \textrm{一个函数的导数几乎处处存在且可积, 在什么条件下它积分积回来还是自己?}
     答案是\ACFunc{}. \textbf{任何一个函数的导数能够通过Lebesgue积分还原, 当且仅当这个函数本身是绝对连续的.}
 \end{rmk}
+\begin{thm}
+    {对绝对值的积分等于全变差等价于绝对连续}
+    若 \(f\) 是 \([a,b]\) 上的\BVFunc{}, \(\int_a^b |f'(x)|=V(f)\). 则 \(f\) 是\ACFunc{}.
+\end{thm}
+\begin{prf}
+    由于积分也是一种可测集划分的极限, 所以自然有
+    \[\int_u^v|f'|\leq\Varia_u^v(f) \]
+    考虑函数
+    \[F(x)=\int_a^x |f'|-\Varia_a^x(f)\]
+    那么 \(F(a)=F(b)=0\) 但是 \(F(x)\) 又是单调递减的. 所以只可能 \(F(x)=0\) 恒成立. 所以 \(F\) 是连续函数, 满足
+    \[|f(u)-f(v)|\leq\Varia_u^v(f)=\int_u^v|f'(t)|\dd{t} \]
+    那么当 \(v-u<\delta\) 的时候, 根据测度的绝对连续性, \(\int_u^v|f'|<\epsilon\). 取有限个区间求和仍旧是无穷小量. 从而 \(f\) 是\ACFunc{}.
+\end{prf}
 \subsection{Lp 空间}
 此部分请参见【泛函分析】中有关 \(L^p\) 空间的内容.
 \iffalse
